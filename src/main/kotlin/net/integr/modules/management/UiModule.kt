@@ -1,3 +1,5 @@
+@file:Suppress("DuplicatedCode")
+
 package net.integr.modules.management
 
 import com.google.gson.GsonBuilder

@@ -1,3 +1,5 @@
+@file:Suppress("DuplicatedCode")
+
 package net.integr.modules.impl
 
 import net.integr.event.RenderArmEvent

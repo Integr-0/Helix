@@ -4,7 +4,6 @@ import net.integr.Helix
 import net.integr.Variables
 import net.integr.rendering.RenderingEngine
 import net.integr.rendering.uisystem.base.HelixUiElement
-import net.integr.utilities.LogUtils
 import net.integr.utilities.round
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.Drawable
@@ -13,8 +12,6 @@ import net.minecraft.sound.SoundEvents
 import net.minecraft.util.math.MathHelper
 import org.jetbrains.annotations.Nullable
 import org.lwjgl.glfw.GLFW
-import kotlin.math.abs
-import kotlin.math.round
 
 @Suppress("MemberVisibilityCanBePrivate")
 class Slider(var xPos: Int, var yPos: Int, var xSize: Int, var ySize: Int, @Nullable var text: String?, var textCentered: Boolean, var tooltip: String, val min: Double, var max: Double) : Drawable, HelixUiElement {

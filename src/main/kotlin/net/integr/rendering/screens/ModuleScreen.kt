@@ -1,3 +1,5 @@
+@file:Suppress("DuplicatedCode")
+
 package net.integr.rendering.screens
 
 import net.integr.Helix
@@ -10,7 +12,6 @@ import net.integr.rendering.uisystem.base.HelixUiElement
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.text.Text
-import net.minecraft.util.Formatting
 
 class ModuleScreen(mod: Module) : Screen(Text.literal("${mod.displayName} Config")) {
     private val layout = UiLayout()

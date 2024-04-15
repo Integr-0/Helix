@@ -3,7 +3,6 @@ package net.integr
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.annotations.Expose
-import net.integr.modules.management.settings.Setting
 import net.integr.modules.management.settings.SettingsBuilder
 import net.integr.modules.management.settings.impl.BooleanSetting
 import net.integr.modules.management.settings.impl.CyclerSetting

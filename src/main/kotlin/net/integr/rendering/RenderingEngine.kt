@@ -1,3 +1,5 @@
+@file:Suppress("DuplicatedCode", "unused")
+
 package net.integr.rendering
 
 import com.mojang.blaze3d.systems.RenderSystem
@@ -8,10 +10,7 @@ import net.minecraft.client.render.*
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.*
 import org.joml.Matrix4f
-import org.lwjgl.glfw.GLFW
-import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11
-import org.lwjgl.opengl.GL13.GL_MULTISAMPLE
 import java.awt.Color
 import kotlin.math.abs
 import kotlin.math.cos

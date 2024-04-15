@@ -1,13 +1,11 @@
 package net.integr.rendering.uisystem
 
-import kotlinx.coroutines.Runnable
 import net.integr.Helix
 import net.integr.Variables
 import net.integr.modules.management.Module
 import net.integr.rendering.RenderingEngine
 import net.integr.rendering.screens.ModuleScreen
 import net.integr.rendering.uisystem.base.HelixUiElement
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.Drawable
 import net.minecraft.client.sound.PositionedSoundInstance
@@ -80,7 +78,7 @@ class ModuleButton(var xPos: Int, var yPos: Int, var xSize: Int, var ySize: Int,
 
             if (mouseX.toInt() in (x1 + 1)..<x2 && mouseY > y1 && mouseY < y2) {
                 module.setState(!module.enabled)
-                Helix.MC.soundManager.play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                Helix.MC.soundManager.play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F))
             }
         }
 
@@ -93,7 +91,7 @@ class ModuleButton(var xPos: Int, var yPos: Int, var xSize: Int, var ySize: Int,
             if (mouseX.toInt() in (x1 + 1)..<x2 && mouseY > y1 && mouseY < y2) {
                 if (module.settings.options.isNotEmpty()) {
                     Helix.MC.setScreen(ModuleScreen(module))
-                    Helix.MC.soundManager.play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                    Helix.MC.soundManager.play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F))
                 }
             }
         }

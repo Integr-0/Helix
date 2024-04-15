@@ -1,3 +1,5 @@
+@file:Suppress("DuplicatedCode")
+
 package net.integr.rendering.uisystem
 
 import net.integr.Helix

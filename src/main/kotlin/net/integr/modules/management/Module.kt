@@ -1,3 +1,5 @@
+@file:Suppress("DuplicatedCode")
+
 package net.integr.modules.management
 
 import com.google.gson.GsonBuilder
@@ -7,7 +9,6 @@ import net.integr.Helix
 import net.integr.eventsystem.EventSystem
 import net.integr.modules.management.settings.SettingsBuilder
 import net.integr.utilities.LogUtils
-import java.io.File
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path

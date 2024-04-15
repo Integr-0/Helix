@@ -1,3 +1,5 @@
+@file:Suppress("DuplicatedCode")
+
 package net.integr.rendering.screens
 
 import net.integr.Helix
@@ -69,7 +71,7 @@ class MenuScreen : Screen(Text.literal("Helix Menu")) {
         preInitSizeY += (ModuleManager.modules.count() / 3) * 25
 
         var currY = 5
-        var mCount = 0;
+        var mCount = 0
 
         for (m in ModuleManager.modules) {
             val b = layout.add(ModuleButton(width/2-preInitSizeX/2 + getXFromIndex(ModuleManager.modules.indexOf(m)%3), height/2-preInitSizeY/2 + currY, 200, 20, m.displayName, true, m.toolTip, false, m))

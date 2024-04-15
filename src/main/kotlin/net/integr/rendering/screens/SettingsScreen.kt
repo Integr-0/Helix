@@ -1,8 +1,9 @@
+@file:Suppress("DuplicatedCode")
+
 package net.integr.rendering.screens
 
 import net.integr.Helix
 import net.integr.Settings
-import net.integr.modules.management.Module
 import net.integr.modules.management.settings.Setting
 import net.integr.rendering.uisystem.Box
 import net.integr.rendering.uisystem.IconButton
@@ -11,7 +12,6 @@ import net.integr.rendering.uisystem.base.HelixUiElement
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.text.Text
-import net.minecraft.util.Formatting
 
 class SettingsScreen : Screen(Text.literal("Settings")) {
     private val layout = UiLayout()

@@ -1,6 +1,7 @@
+@file:Suppress("unused")
+
 package net.integr.eventsystem
 
-import net.integr.Helix
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance

@@ -35,6 +35,7 @@ public class InGameHudMixin {
     @Shadow @Final private MinecraftClient client;
     @Shadow private boolean overlayTinted;
     @Unique boolean uniqueOverlayTinted;
+
     @Shadow private void drawTextBackground(DrawContext context, TextRenderer textRenderer, int yOffset, int width, int color) {
 
     }
