@@ -8,8 +8,8 @@
 		"Integr"
 	],
 	"contact": {
-		"homepage": "http://integr.is-a.dev/",
-		"sources": "soon"
+		"homepage": "https://integr.is-a.dev/",
+		"sources": "https://github.com/Integr-0/Helix"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/helix/helix_round.png",
