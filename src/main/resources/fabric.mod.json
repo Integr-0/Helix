@@ -1,0 +1,39 @@
+{
+	"schemaVersion": 1,
+	"id": "helix",
+	"version": "${version}",
+	"name": "Helix",
+	"description": "Helix Utility Client",
+	"authors": [
+		"Integr"
+	],
+	"contact": {
+		"homepage": "http://integr.is-a.dev/",
+		"sources": "soon"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/helix/helix_round.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			{
+				"value": "net.integr.Helix",
+				"adapter": "kotlin"
+			}
+		]
+	},
+	"mixins": [
+		"helix.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.9",
+		"minecraft": "~1.20.4",
+		"java": ">=17",
+		"fabric-api": "*",
+		"fabric-key-binding-api-v1": "*",
+		"fabric-language-kotlin": ">=1.9.23"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
