@@ -5,6 +5,10 @@ Helix is a QOL Mod that aims to improve your experience
 
 [About Me](https://integr.is-a.dev/) | [Source](https://github.com/Integr-0/Helix) | [Issues](https://github.com/Integr-0/Helix/issues)
 
+<img src="https://cdn.modrinth.com/data/cached_images/a27519bb7f8a38f6307d68dc28e889a3c2745cb6.png" alt="Helix" width="200"/>
+
+<img src="https://cdn.modrinth.com/data/cached_images/f927efb8451e54b96685974de26bafabf1878dcd.png" alt="Helix" width="180"/>
+
 ## Accent colors
 - ### Rgb
   ![Rgb](https://cdn.modrinth.com/data/cached_images/c5a346d2a2dd2bda9e2fefb772241084c35e4f1e.png)
