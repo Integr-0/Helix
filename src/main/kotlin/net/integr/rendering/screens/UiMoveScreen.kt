@@ -23,6 +23,8 @@ class UiMoveScreen : Screen(Text.literal("Helix Ui-Move Screen")){
             val box = w.box
             val module = w.module
 
+            box.ySize = module.height
+            box.xSize = module.width
             box.render(context, mouseX, mouseY, delta)
             module.updatePosition(box.xPos, box.yPos)
         }

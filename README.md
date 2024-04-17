@@ -5,7 +5,18 @@ Helix is a QOL Mod that aims to improve your experience
 
 [About Me](https://integr.is-a.dev/) | [Source](https://github.com/Integr-0/Helix) | [Issues](https://github.com/Integr-0/Helix/issues)
 
-<img src="https://cdn.modrinth.com/data/cached_images/a27519bb7f8a38f6307d68dc28e889a3c2745cb6.png" alt="Helix" width="200"/> <img src="https://cdn.modrinth.com/data/cached_images/f927efb8451e54b96685974de26bafabf1878dcd.png" alt="Helix" width="180"/>
+<img src="https://cdn.modrinth.com/data/cached_images/a27519bb7f8a38f6307d68dc28e889a3c2745cb6.png" alt="Kotlin Adapter" width="200"/> <img src="https://cdn.modrinth.com/data/cached_images/f927efb8451e54b96685974de26bafabf1878dcd.png" alt="Fabric Api" width="180"/>
+
+## Installation
+Helix requires the Kotlin language adapter and the Fabric API to work correctly
+
+### How to install, step by step
+- Download the latest release of Helix, the matching Fabric API and Kotlin language adapter
+- Put all 3 mods in your mods folder
+- Make sure you have the correct java version installed (17)
+- Make sure you have the fabric loader installed
+- Launch the fabric loader
+- Have fun!
 
 ## Accent colors
 - ### Rgb
@@ -29,7 +40,7 @@ Helix is a QOL Mod that aims to improve your experience
 - ### Dark
   ![Dark](https://cdn.modrinth.com/data/cached_images/c593fc799439a15183dc9d4534b76c5b5abb35a0.png)
 - ### Light
-  ![Replace this with a description](https://cdn.modrinth.com/data/cached_images/69b7901b52164e02c1ec36109cd6d2c01d14b8f8.png)
+  ![Light](https://cdn.modrinth.com/data/cached_images/69b7901b52164e02c1ec36109cd6d2c01d14b8f8.png)
 
 ## Ingame features
 - ### Autosprint

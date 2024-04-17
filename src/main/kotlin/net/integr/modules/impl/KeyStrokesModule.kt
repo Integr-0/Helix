@@ -29,7 +29,13 @@ class KeyStrokesModule : UiModule("Keystrokes", "Renders your Key Inputs", "keys
 
         val renderSpace = settings.getById<BooleanSetting>("spaceBar")!!.isEnabled()
 
-        if (!renderSpace) background.ySize = 55 else background.ySize = 80
+        if (!renderSpace) {
+            background.ySize = 55
+            super.height = 55
+        } else {
+            background.ySize = 80
+            super.height = 80
+        }
         background.update(originX, originY).render(context, 0, 0, delta)
 
         keyW.update(originX + 29, originY + 5).render(context, 0, 0, delta)

@@ -11,6 +11,10 @@ class UiLayout {
         return obj
     }
 
+    fun clear() {
+        l.clear()
+    }
+
     fun onClick(mouseX: Double, mouseY: Double, button: Int) {
         for (e in l) {
             e.onClick(mouseX, mouseY, button)
