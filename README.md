@@ -1,11 +1,12 @@
 <img src="https://cdn.modrinth.com/data/cached_images/c49c367c6c18990eb5df2459f70d3bf5e80d3cd2.png" alt="Helix" width="200"/>
 
 # Helix Utility Client
-Helix is a QOL Mod that aims to improve your experience
+Helix is a QOL Mod that aims to improve your experience by adding various features.
+Helix if free and open source, forever.
 
 [About Me](https://integr.is-a.dev/) | [Source](https://github.com/Integr-0/Helix) | [Issues](https://github.com/Integr-0/Helix/issues)
 
-<img src="https://cdn.modrinth.com/data/cached_images/a27519bb7f8a38f6307d68dc28e889a3c2745cb6.png" alt="Kotlin Adapter" width="200"/> <img src="https://cdn.modrinth.com/data/cached_images/f927efb8451e54b96685974de26bafabf1878dcd.png" alt="Fabric Api" width="180"/>
+[<img src="https://cdn.modrinth.com/data/cached_images/a27519bb7f8a38f6307d68dc28e889a3c2745cb6.png" alt="Kotlin Adapter" width="200"/>](https://modrinth.com/mod/fabric-language-kotlin) [<img src="https://cdn.modrinth.com/data/cached_images/f927efb8451e54b96685974de26bafabf1878dcd.png" alt="Fabric Api" width="180"/>](https://modrinth.com/mod/fabric-api)
 
 ## Installation
 Helix requires the Kotlin language adapter and the Fabric API to work correctly
@@ -43,6 +44,8 @@ Helix requires the Kotlin language adapter and the Fabric API to work correctly
   ![Light](https://cdn.modrinth.com/data/cached_images/69b7901b52164e02c1ec36109cd6d2c01d14b8f8.png)
 
 ## Ingame features
+- ### Armorhud
+  Shows you your armor on the screen without having to open your inventory
 - ### Autosprint
   Presses the sprint key for you
 - ### Betterarm
