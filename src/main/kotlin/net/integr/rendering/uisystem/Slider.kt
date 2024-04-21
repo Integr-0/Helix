@@ -1,9 +1,12 @@
+@file:Suppress("DuplicatedCode")
+
 package net.integr.rendering.uisystem
 
 import net.integr.Helix
 import net.integr.Variables
 import net.integr.rendering.RenderingEngine
 import net.integr.rendering.uisystem.base.HelixUiElement
+import net.integr.utilities.LogUtils
 import net.integr.utilities.round
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.Drawable
@@ -51,16 +54,16 @@ class Slider(var xPos: Int, var yPos: Int, var xSize: Int, var ySize: Int, @Null
     }
 
     fun valueFromFillX(): Double {
-        val lowerBound = min
-        val upperBound = max
+        val lowerBound = min // -2
+        val upperBound = max // +2
 
-        val sectionCount = xSize
+        val sectionCount = xSize // 200
 
-        val valueRange = upperBound - lowerBound
+        val valueRange = upperBound - lowerBound // 4
 
-        val sectionValue = valueRange/sectionCount
+        val sectionValue = valueRange/sectionCount //
 
-        return MathHelper.clamp(fillX * sectionValue, min, max)
+        return MathHelper.clamp(fillX * sectionValue + min, min, max)
     }
 
     fun xFillFromValue(value: Double): Int {
@@ -73,8 +76,7 @@ class Slider(var xPos: Int, var yPos: Int, var xSize: Int, var ySize: Int, @Null
 
         val sectionValue = valueRange/sectionCount
 
-        return (value / sectionValue).toInt()
-
+        return ((value - min) / sectionValue).toInt()
     }
 
     override fun renderTooltip(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {

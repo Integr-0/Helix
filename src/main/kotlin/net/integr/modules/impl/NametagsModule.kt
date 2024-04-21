@@ -8,6 +8,7 @@ import net.integr.modules.management.Module
 import net.integr.modules.management.settings.impl.BooleanSetting
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import kotlin.math.roundToInt
@@ -27,7 +28,7 @@ class NametagsModule : Module("Nametags", "Changes the nametags", "nametags") {
 
     @EventListen
     fun onEntityRenderLabel(event: EntityRenderLabelEvent) {
-        if (settings.getById<BooleanSetting>("healthTags")!!.isEnabled()) {
+        if (settings.getById<BooleanSetting>("healthTags")!!.isEnabled() && event.entity is PlayerEntity && event.text.string.contains((event.entity as PlayerEntity).gameProfile.name)) {
             event.callback = Text.literal(event.text.string + Formatting.RED + " ${(event.entity as LivingEntity).health.roundToInt() + (event.entity as LivingEntity).absorptionAmount.roundToInt()}❤"+ Formatting.GRAY + " ${(event.entity as LivingEntity).distanceTo(Helix.MC.player).roundToInt()}m")
         }
     }

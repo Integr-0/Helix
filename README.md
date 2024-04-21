@@ -2,7 +2,7 @@
 
 # Helix Utility Client
 Helix is a QOL Mod that aims to improve your experience by adding various features.
-Helix if free and open source, forever.
+Helix is free and open source, forever.
 
 [About Me](https://integr.is-a.dev/) | [Source](https://github.com/Integr-0/Helix) | [Issues](https://github.com/Integr-0/Helix/issues)
 
@@ -72,5 +72,8 @@ Helix requires the Kotlin language adapter and the Fabric API to work correctly
   Disables the rendering of certain things
 - ### Ping Display
   Shows your current ping
+- ### Chat Format
+  Create gradients without leaving minecraft
+  ![Format](https://cdn.modrinth.com/data/cached_images/cc9d56a7c154db2f3aef68cc481a1fc3f9cca089.png)
 ## Discord Presence
 Shows some information about the server or world you are on to your friends on discord
