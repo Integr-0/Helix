@@ -9,13 +9,17 @@ import net.integr.modules.filters.Filter
 import net.integr.modules.management.Module
 import net.integr.modules.management.settings.impl.BooleanSetting
 import net.integr.utilities.LogUtils
+import net.integr.utilities.Evaluator
 import java.awt.Color
 
 
 class ChatFormatModule : Module("Chat Format", "Chat formatter (Details on the Modrinth page)", "chatFormat", listOf(Filter.Util)){
     init {
-        settings.add(BooleanSetting("Gradients", "Enable the gradient generator formatting option", "gradients"))
+        settings
+            .add(BooleanSetting("Gradients", "Enable the gradient generator formatting option", "gradients"))
+            .add(BooleanSetting("Math", "Enable the math solver formatting option", "math"))
     }
+
     @EventListen
     fun onChatMessage(event: SendChatMessageEvent) {
         val m = replaceInText(event.message)
@@ -30,6 +34,15 @@ class ChatFormatModule : Module("Chat Format", "Chat formatter (Details on the M
 
     private fun replaceInText(messageIn: String): String {
         var message = messageIn
+
+        if (settings.getById<BooleanSetting>("math")!!.isEnabled()) {
+            Regex("(<solve>)[^<]*(<solve>)").findAll(messageIn).forEach { exp ->
+                val text = exp.value.substring(exp.value.indexOf('>')+1..<exp.value.lastIndexOf('<'))
+
+                val result = Evaluator.evaluate(text)
+                message = message.replaceRange(exp.range.first, exp.range.last+1, result.toString())
+            }
+        }
 
         if (settings.getById<BooleanSetting>("gradients")!!.isEnabled()) {
             Regex("(<.*:([lonm]*)#[0-9a-f]{6}>)[^<]*(<#[0-9a-f]{6}>)").findAll(messageIn).forEach { exp ->

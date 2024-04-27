@@ -44,12 +44,14 @@ Helix requires the Kotlin language adapter and the Fabric API to work correctly
   ![Light](https://cdn.modrinth.com/data/cached_images/69b7901b52164e02c1ec36109cd6d2c01d14b8f8.png)
 
 ## Ingame features
-- ### Armorhud
+- ### Block Outline
+  Changes your block outline and adds optional entity outlines
+- ### Armor Hud
   Shows you your armor on the screen without having to open your inventory
 - ### Autosprint
   Presses the sprint key for you
-- ### Betterarm
-  Changes the rendering of your ingame hand
+- ### Better Arm
+  Changes the rendering of your In-Game hand
 - ### Coordinates
   Shows you your coordinates in the world
 - ### Cosmetics
@@ -75,6 +77,8 @@ Helix requires the Kotlin language adapter and the Fabric API to work correctly
 - ### Chat Format
   Create gradients without leaving minecraft
   ![Format](https://cdn.modrinth.com/data/cached_images/cc9d56a7c154db2f3aef68cc481a1fc3f9cca089.png)
+  
+  Also has the option so solve simple math, for example ```<solve>1+2*(27-5)/5<solve>```
 ## Discord Presence
 Shows some information about the server or world you are on to your friends on discord
 

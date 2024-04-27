@@ -38,15 +38,9 @@ public abstract class InGameHudMixin {
     @Shadow @Final private MinecraftClient client;
     @Shadow private boolean overlayTinted;
     @Unique boolean uniqueOverlayTinted;
-
-    @Shadow private void drawTextBackground(DrawContext context, TextRenderer textRenderer, int yOffset, int width, int color) {
-
-    }
-
+    @Shadow private void drawTextBackground(DrawContext context, TextRenderer textRenderer, int yOffset, int width, int color) {}
     @Shadow private int heldItemTooltipFade;
-
     @Shadow private ItemStack currentStack;
-
     @Shadow public abstract TextRenderer getTextRenderer();
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
@@ -91,8 +85,8 @@ public abstract class InGameHudMixin {
 
                     m = l << 24 & -16777216;
                     n = Helix.Companion.getMC().textRenderer.getWidth(uniqueOverlayMessage);
-                    drawTextBackground(context, Helix.Companion.getMC().textRenderer, -58, n, 16777215 | m);
-                    context.drawTextWithShadow(Helix.Companion.getMC().textRenderer, uniqueOverlayMessage, -n / 2, -58, k | m);
+                    drawTextBackground(context, Helix.Companion.getMC().textRenderer, -59, n, 16777215 | m);
+                    context.drawTextWithShadow(Helix.Companion.getMC().textRenderer, uniqueOverlayMessage, -n / 2, -59, k | m);
                     context.getMatrices().pop();
                 }
 
@@ -145,8 +139,8 @@ public abstract class InGameHudMixin {
                     int var10002 = k - 2;
                     int var10003 = j + i + 2;
                     Objects.requireNonNull(this.getTextRenderer());
-                    context.fill(var10001, var10002, var10003, k + 9 + 2-48, this.client.options.getTextBackgroundColor(0));
-                    context.drawTextWithShadow(this.getTextRenderer(), mutableText, j, k-48, 16777215 + (l << 24));
+                    context.fill(var10001, var10002, var10003, k + 9 + 2-50, this.client.options.getTextBackgroundColor(0));
+                    context.drawTextWithShadow(this.getTextRenderer(), mutableText, j, k-50, 16777215 + (l << 24));
                 }
             }
 

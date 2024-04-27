@@ -1,6 +1,7 @@
 package net.integr.utilities
 
 import net.minecraft.entity.Entity
+import net.minecraft.util.math.Box
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
 
@@ -73,6 +74,10 @@ class CoordinateUtils {
             val y = MathHelper.lerp(partialTicks.toDouble(), e.lastRenderY, e.y)
             val z = MathHelper.lerp(partialTicks.toDouble(), e.lastRenderZ, e.z)
             return Vec3d(x, y, z)
+        }
+
+        fun getEntityBox(e: Entity): Box {
+            return Box(-(e.boundingBox.lengthX/2), 0.0, -(e.boundingBox.lengthZ/2), (e.boundingBox.lengthX/2), e.boundingBox.lengthY, (e.boundingBox.lengthZ/2))
         }
     }
 }

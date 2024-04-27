@@ -198,6 +198,7 @@ class RenderingEngine {
                 GL11.glDisable(GL11.GL_BLEND)
             }
 
+
             fun box(block: Vec3d, matrixStack: MatrixStack, color: Int) {
                 GL11.glEnable(GL11.GL_BLEND)
                 GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
@@ -223,7 +224,7 @@ class RenderingEngine {
                     col.red.toFloat() / 255f,
                     col.green.toFloat() / 255f,
                     col.blue.toFloat() / 255f,
-                    0.5f
+                    1f
                 )
                 boxLines(bb, matrixStack, tesselator)
                 tesselator.draw()
@@ -236,6 +237,86 @@ class RenderingEngine {
                     0.3f
                 )
                 boxFill(bb, matrixStack, tesselator)
+                tesselator.draw()
+
+                matrixStack.pop()
+                RenderSystem.setShaderColor(1f, 1f, 1f, 1f)
+                GL11.glEnable(GL11.GL_DEPTH_TEST)
+                GL11.glDisable(GL11.GL_BLEND)
+            }
+
+            fun box(box: Box, block: Vec3d, matrixStack: MatrixStack, color: Int) {
+                GL11.glEnable(GL11.GL_BLEND)
+                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
+                GL11.glEnable(GL11.GL_CULL_FACE)
+                GL11.glDisable(GL11.GL_DEPTH_TEST)
+                RenderSystem.setShader { GameRenderer.getPositionProgram() }
+                matrixStack.push()
+                val camPos: BlockPos = Helix.MC.gameRenderer.camera.blockPos
+                val regionX = camPos.x
+                val regionZ = camPos.z
+
+                applyRegionalRenderOffset(matrixStack, regionX, regionZ)
+                matrixStack.translate(block.getX() - regionX, block.getY(), block.getZ() - regionZ)
+                RenderSystem.setShader { GameRenderer.getPositionProgram() }
+                val col = Color(color)
+
+                val tesselator = RenderSystem.renderThreadTesselator()
+                val bufferBuilder = tesselator.buffer
+
+                bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION)
+                RenderSystem.setShaderColor(
+                    col.red.toFloat() / 255f,
+                    col.green.toFloat() / 255f,
+                    col.blue.toFloat() / 255f,
+                    1f
+                )
+                boxLines(box, matrixStack, tesselator)
+                tesselator.draw()
+
+                bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION)
+                RenderSystem.setShaderColor(
+                    col.red.toFloat() / 255f,
+                    col.green.toFloat() / 255f,
+                    col.blue.toFloat() / 255f,
+                    0.3f
+                )
+                boxFill(box, matrixStack, tesselator)
+                tesselator.draw()
+
+                matrixStack.pop()
+                RenderSystem.setShaderColor(1f, 1f, 1f, 1f)
+                GL11.glEnable(GL11.GL_DEPTH_TEST)
+                GL11.glDisable(GL11.GL_BLEND)
+            }
+
+            fun outlinedBox(box: Box, block: Vec3d, matrixStack: MatrixStack, color: Int) {
+                GL11.glEnable(GL11.GL_BLEND)
+                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
+                GL11.glEnable(GL11.GL_CULL_FACE)
+                GL11.glDisable(GL11.GL_DEPTH_TEST)
+                RenderSystem.setShader { GameRenderer.getPositionProgram() }
+                matrixStack.push()
+                val camPos: BlockPos = Helix.MC.gameRenderer.camera.blockPos
+                val regionX = camPos.x
+                val regionZ = camPos.z
+
+                applyRegionalRenderOffset(matrixStack, regionX, regionZ)
+                matrixStack.translate(block.getX() - regionX, block.getY(), block.getZ() - regionZ)
+                RenderSystem.setShader { GameRenderer.getPositionProgram() }
+                val col = Color(color)
+
+                val tesselator = RenderSystem.renderThreadTesselator()
+                val bufferBuilder = tesselator.buffer
+
+                bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION)
+                RenderSystem.setShaderColor(
+                    col.red.toFloat() / 255f,
+                    col.green.toFloat() / 255f,
+                    col.blue.toFloat() / 255f,
+                    1f
+                )
+                boxLines(box, matrixStack, tesselator)
                 tesselator.draw()
 
                 matrixStack.pop()
