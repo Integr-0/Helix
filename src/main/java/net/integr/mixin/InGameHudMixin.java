@@ -11,7 +11,10 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -25,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Objects;
 
 @Mixin(InGameHud.class)
-public class InGameHudMixin {
+public abstract class InGameHudMixin {
     @Shadow @Nullable private Text overlayMessage;
     @Unique Text uniqueOverlayMessage;
     @Shadow private int overlayRemaining;
@@ -39,6 +42,12 @@ public class InGameHudMixin {
     @Shadow private void drawTextBackground(DrawContext context, TextRenderer textRenderer, int yOffset, int width, int color) {
 
     }
+
+    @Shadow private int heldItemTooltipFade;
+
+    @Shadow private ItemStack currentStack;
+
+    @Shadow public abstract TextRenderer getTextRenderer();
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     public void onRender(DrawContext context, float tickDelta, CallbackInfo ci) {
@@ -82,8 +91,8 @@ public class InGameHudMixin {
 
                     m = l << 24 & -16777216;
                     n = Helix.Companion.getMC().textRenderer.getWidth(uniqueOverlayMessage);
-                    drawTextBackground(context, Helix.Companion.getMC().textRenderer, -4, n, 16777215 | m);
-                    context.drawTextWithShadow(Helix.Companion.getMC().textRenderer, uniqueOverlayMessage, -n / 2, -14, k | m);
+                    drawTextBackground(context, Helix.Companion.getMC().textRenderer, -58, n, 16777215 | m);
+                    context.drawTextWithShadow(Helix.Companion.getMC().textRenderer, uniqueOverlayMessage, -n / 2, -58, k | m);
                     context.getMatrices().pop();
                 }
 
@@ -110,6 +119,38 @@ public class InGameHudMixin {
     public void renderHeldItemTooltip(DrawContext context, CallbackInfo ci) {
         if (Objects.requireNonNull(ModuleManager.Companion.getByClass(HotbarModule.class)).isEnabled() && ((BooleanSetting) Objects.requireNonNull(Objects.requireNonNull(ModuleManager.Companion.getByClass(HotbarModule.class)).getSettings().getById("locked"))).isEnabled()) {
             ci.cancel();
+
+            this.client.getProfiler().push("selectedItemName");
+            if (this.heldItemTooltipFade > 0 && !this.currentStack.isEmpty()) {
+                MutableText mutableText = Text.empty().append(this.currentStack.getName()).formatted(this.currentStack.getRarity().formatting);
+                if (currentStack.hasCustomName()) {
+                    mutableText.formatted(Formatting.ITALIC);
+                }
+
+                int i = getTextRenderer().getWidth(mutableText);
+                int j = (this.scaledWidth - i) / 2;
+                int k = this.scaledHeight - 59;
+                assert this.client.interactionManager != null;
+                if (!this.client.interactionManager.hasStatusBars()) {
+                    k += 14;
+                }
+
+                int l = (int)((float)heldItemTooltipFade * 256.0F / 10.0F);
+                if (l > 255) {
+                    l = 255;
+                }
+
+                if (l > 0) {
+                    int var10001 = j - 2;
+                    int var10002 = k - 2;
+                    int var10003 = j + i + 2;
+                    Objects.requireNonNull(this.getTextRenderer());
+                    context.fill(var10001, var10002, var10003, k + 9 + 2-48, this.client.options.getTextBackgroundColor(0));
+                    context.drawTextWithShadow(this.getTextRenderer(), mutableText, j, k-48, 16777215 + (l << 24));
+                }
+            }
+
+            this.client.getProfiler().pop();
         }
     }
 }
