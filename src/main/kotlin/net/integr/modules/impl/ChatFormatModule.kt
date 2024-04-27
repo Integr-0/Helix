@@ -23,13 +23,13 @@ class ChatFormatModule : Module("Chat Format", "Chat formatter (Details on the M
     @EventListen
     fun onChatMessage(event: SendChatMessageEvent) {
         val m = replaceInText(event.message)
-        if (m.length < 269) event.callback = m else LogUtils.sendChatLog("Message to Long!")
+        if (m.length < 269 && m.isNotEmpty()) event.callback = m else LogUtils.sendChatLog("Message to Long/Short!")
     }
 
     @EventListen
     fun onCommand(event: SendCommandEvent) {
         val m = replaceInText(event.command)
-        if (m.length < 269) event.callback = m else LogUtils.sendChatLog("Message to Long!")
+        if (m.length < 269 && m.isNotEmpty()) event.callback = m else LogUtils.sendChatLog("Message to Long/Short!")
     }
 
     private fun replaceInText(messageIn: String): String {
@@ -39,8 +39,16 @@ class ChatFormatModule : Module("Chat Format", "Chat formatter (Details on the M
             Regex("(<solve>)[^<]*(<solve>)").findAll(messageIn).forEach { exp ->
                 val text = exp.value.substring(exp.value.indexOf('>')+1..<exp.value.lastIndexOf('<'))
 
-                val result = Evaluator.evaluate(text)
-                message = message.replaceRange(exp.range.first, exp.range.last+1, result.toString())
+                var result = ""
+
+                try {
+                    result = Evaluator.evaluate(text)
+                } catch (e: Exception) {
+                    LogUtils.sendChatLog("Invalid Operation!")
+                    e.printStackTrace()
+                }
+
+                message = message.replaceRange(exp.range.first, exp.range.last+1, result)
             }
         }
 
