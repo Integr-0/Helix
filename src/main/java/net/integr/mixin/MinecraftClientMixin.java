@@ -1,10 +1,10 @@
 package net.integr.mixin;
 
 import net.integr.Helix;
-import net.integr.discord.PresenceHandler;
 import net.integr.event.*;
 import net.integr.eventsystem.EventSystem;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.world.ClientWorld;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -41,5 +41,10 @@ public class MinecraftClientMixin {
     @Inject(method = "cleanUpAfterCrash", at = @At("HEAD"))
     public void onCrash(CallbackInfo ci) {
         EventSystem.Companion.post(new ClientEndEvent());
+    }
+
+    @Inject(method = "joinWorld", at = @At("HEAD"))
+    public void onJoinWorld(ClientWorld world, CallbackInfo ci) {
+        EventSystem.Companion.post(new JoinWorldEvent(world));
     }
 }

@@ -4,6 +4,7 @@ import net.integr.Helix
 import net.integr.event.EntityHasLabelEvent
 import net.integr.event.EntityRenderLabelEvent
 import net.integr.eventsystem.EventListen
+import net.integr.modules.filters.Filter
 import net.integr.modules.management.Module
 import net.integr.modules.management.settings.impl.BooleanSetting
 import net.minecraft.client.MinecraftClient
@@ -13,7 +14,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import kotlin.math.roundToInt
 
-class NametagsModule : Module("Nametags", "Changes the nametags", "nametags") {
+class NametagsModule : Module("Nametags", "Changes the nametags", "nametags", listOf(Filter.Render)) {
     init {
         settings.add(BooleanSetting("Render Own", "Render your own Nametag", "own"))
         settings.add(BooleanSetting("Healthtags", "Render healthtags", "healthTags"))
@@ -29,7 +30,7 @@ class NametagsModule : Module("Nametags", "Changes the nametags", "nametags") {
     @EventListen
     fun onEntityRenderLabel(event: EntityRenderLabelEvent) {
         if (settings.getById<BooleanSetting>("healthTags")!!.isEnabled() && event.entity is PlayerEntity && event.text.string.contains((event.entity as PlayerEntity).gameProfile.name)) {
-            event.callback = Text.literal(event.text.string + Formatting.RED + " ${(event.entity as LivingEntity).health.roundToInt() + (event.entity as LivingEntity).absorptionAmount.roundToInt()}❤"+ Formatting.GRAY + " ${(event.entity as LivingEntity).distanceTo(Helix.MC.player).roundToInt()}m")
+            event.callback = event.text.copy().append(Text.literal("" + Formatting.RED + " ${(event.entity as LivingEntity).health.roundToInt() + (event.entity as LivingEntity).absorptionAmount.roundToInt()}❤"+ Formatting.GRAY + " ${(event.entity as LivingEntity).distanceTo(Helix.MC.player).roundToInt()}m"))
         }
     }
 }

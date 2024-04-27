@@ -4,12 +4,13 @@ import net.integr.event.RenderEntityEvent
 import net.integr.event.SpawnBreakingParticlesEvent
 import net.integr.event.SpawnParticleEvent
 import net.integr.eventsystem.EventListen
+import net.integr.modules.filters.Filter
 import net.integr.modules.management.Module
 import net.integr.modules.management.settings.impl.BooleanSetting
 import net.minecraft.entity.EntityType
 import net.minecraft.particle.ParticleTypes
 
-class NoRenderModule : Module("NoRender", "Disables rendering of some things", "noRender") {
+class NoRenderModule : Module("NoRender", "Disables rendering of some things", "noRender", listOf(Filter.Render)) {
     init {
         settings
             .add(BooleanSetting("No Items", "Disable Items", "items"))

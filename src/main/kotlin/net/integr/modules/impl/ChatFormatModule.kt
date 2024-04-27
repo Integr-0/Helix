@@ -2,46 +2,53 @@
 
 package net.integr.modules.impl
 
-import net.integr.Helix
 import net.integr.event.SendChatMessageEvent
 import net.integr.event.SendCommandEvent
 import net.integr.eventsystem.EventListen
+import net.integr.modules.filters.Filter
 import net.integr.modules.management.Module
-import net.minecraft.client.gui.DrawContext
+import net.integr.modules.management.settings.impl.BooleanSetting
+import net.integr.utilities.LogUtils
 import java.awt.Color
-import kotlin.math.*
 
 
-class ChatFormatModule : Module("Chat Format", "Chat formatter (Details on the Modrinth page)", "chatFormat"){
+class ChatFormatModule : Module("Chat Format", "Chat formatter (Details on the Modrinth page)", "chatFormat", listOf(Filter.Util)){
+    init {
+        settings.add(BooleanSetting("Gradients", "Enable the gradient generator formatting option", "gradients"))
+    }
     @EventListen
     fun onChatMessage(event: SendChatMessageEvent) {
-        event.callback = replaceInText(event.message)
+        val m = replaceInText(event.message)
+        if (m.length < 269) event.callback = m else LogUtils.sendChatLog("Message to Long!")
     }
 
     @EventListen
     fun onCommand(event: SendCommandEvent) {
-        event.callback = replaceInText(event.command)
+        val m = replaceInText(event.command)
+        if (m.length < 269) event.callback = m else LogUtils.sendChatLog("Message to Long!")
     }
 
     private fun replaceInText(messageIn: String): String {
         var message = messageIn
 
-        Regex("(<.*:([lonm]*)#[0-9a-f]{6}>)[^<]*(<#[0-9a-f]{6}>)").findAll(messageIn).forEach { exp ->
-            var modText = ""
-            val mods = exp.value.substring(exp.value.indexOf(':')+1..<exp.value.indexOf('#'))
-            val fChar = exp.value.substring(1..<exp.value.indexOf(':'))
+        if (settings.getById<BooleanSetting>("gradients")!!.isEnabled()) {
+            Regex("(<.*:([lonm]*)#[0-9a-f]{6}>)[^<]*(<#[0-9a-f]{6}>)").findAll(messageIn).forEach { exp ->
+                var modText = ""
+                val mods = exp.value.substring(exp.value.indexOf(':')+1..<exp.value.indexOf('#'))
+                val fChar = exp.value.substring(1..<exp.value.indexOf(':'))
 
-            mods.forEach {
-                modText += "&$it"
+                mods.forEach {
+                    modText += "&$it"
+                }
+
+                val c1 = exp.value.substring(exp.value.indexOf('<')+1+mods.count()+fChar.count()+1..<exp.value.indexOf('>'))
+                val c2 = exp.value.substring(exp.value.lastIndexOf('<')+1..<exp.value.lastIndexOf('>'))
+
+                val text = exp.value.substring(exp.value.indexOf('>')+1..<exp.value.lastIndexOf('<'))
+
+                val hText = grad(Color.decode(c1), Color.decode(c2), text, fChar, modText)
+                message = message.replaceRange(exp.range.first, exp.range.last+1, hText)
             }
-
-            val c1 = exp.value.substring(exp.value.indexOf('<')+1+mods.count()+fChar.count()+1..<exp.value.indexOf('>'))
-            val c2 = exp.value.substring(exp.value.lastIndexOf('<')+1..<exp.value.lastIndexOf('>'))
-
-            val text = exp.value.substring(exp.value.indexOf('>')+1..<exp.value.lastIndexOf('<'))
-
-            val hText = grad(Color.decode(c1), Color.decode(c2), text, fChar, modText)
-            message = message.replaceRange(exp.range.first, exp.range.last+1, hText)
         }
 
         return message

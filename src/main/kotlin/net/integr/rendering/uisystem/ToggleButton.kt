@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable
 import org.lwjgl.glfw.GLFW
 
 @Suppress("MemberVisibilityCanBePrivate")
-class ToggleButton(var xPos: Int, var yPos: Int, var xSize: Int, var ySize: Int, @Nullable var text: String?, var textCentered: Boolean, var tooltip: String, var icon: Boolean = true) : Drawable, HelixUiElement {
+class ToggleButton(var xPos: Int, var yPos: Int, var xSize: Int, var ySize: Int, @Nullable var text: String?, var textCentered: Boolean, var tooltip: String, var icon: Boolean = true, var executable: ((ToggleButton) -> Unit)? = null) : Drawable, HelixUiElement {
     private var color: Int = 0
     private var textColor: Int = 0
     var enabled: Boolean = false
@@ -73,6 +73,8 @@ class ToggleButton(var xPos: Int, var yPos: Int, var xSize: Int, var ySize: Int,
             if (mouseX.toInt() in (x1 + 1)..<x2 && mouseY > y1 && mouseY < y2) {
                 enabled = !enabled
                 Helix.MC.soundManager.play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F))
+
+                executable?.invoke(this)
             }
         }
     }

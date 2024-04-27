@@ -3,6 +3,7 @@
 package net.integr.rendering.screens
 
 import net.integr.Helix
+import net.integr.modules.filters.Filter
 import net.integr.modules.management.ModuleManager
 import net.integr.rendering.uisystem.*
 import net.integr.rendering.uisystem.base.HelixUiElement
@@ -22,23 +23,43 @@ class MenuScreen : Screen(Text.literal("Helix Menu")) {
 
     private var backgroundBox: Box? = null
     private var actionRowBox: Box? = null
+    private var filterRowBox: Box? = null
+
     private var moveButton: IconButton? = null
     private var settingsButton: IconButton? = null
+
+    private var selectedFilters: MutableList<Filter> = mutableListOf()
+    private var filters: MutableList<PosWrapper> = mutableListOf()
 
     private val modules: MutableList<PosWrapper> = mutableListOf()
 
     override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         backgroundBox!!.update(width/2-preInitSizeX/2, height/2-preInitSizeY/2).render(context, mouseX, mouseY, delta)
-        actionRowBox!!.update(width/2-preInitSizeX/2, height/2-preInitSizeY/2-45).render(context, mouseX, mouseY, delta)
-        moveButton!!.update(width/2+preInitSizeX/2-19,height/2-preInitSizeY/2-45).render(context, mouseX, mouseY, delta)
-        settingsButton!!.update(width/2+preInitSizeX/2-43,height/2-preInitSizeY/2-45).render(context, mouseX, mouseY, delta)
+        actionRowBox!!.update(width/2-preInitSizeX/2, height/2-preInitSizeY/2-45-40).render(context, mouseX, mouseY, delta)
+        filterRowBox!!.update(width/2-preInitSizeX/2, height/2-preInitSizeY/2-45).render(context, mouseX, mouseY, delta)
 
+        moveButton!!.update(width/2+preInitSizeX/2-19,height/2-preInitSizeY/2-45-40).render(context, mouseX, mouseY, delta)
+        settingsButton!!.update(width/2+preInitSizeX/2-43,height/2-preInitSizeY/2-45-40).render(context, mouseX, mouseY, delta)
 
-        for (l in modules) {
+        for (f in filters) {
+            f.element.update(width/2-preInitSizeX/2 + f.xO, height/2-preInitSizeY/2 + f.yO).render(context, mouseX, mouseY, delta)
+        }
+
+        outer@for (l in modules) {
+            for (f in selectedFilters) if (l.filters.contains(f)) {
+                layout.lock(l.element)
+                continue@outer
+            }
+
+            layout.unLock(l.element)
             l.element.update(width/2-preInitSizeX/2 + l.xO, height/2-preInitSizeY/2 + l.yO).render(context, mouseX, mouseY, delta)
         }
 
-        for (l in modules) l.element.renderTooltip(context, mouseX, mouseY, delta)
+        for (f in filters) f.element.renderTooltip(context, mouseX, mouseY, delta)
+        outer@for (l in modules) {
+            for (f in selectedFilters) if (!l.filters.contains(f)) continue@outer
+            l.element.renderTooltip(context, mouseX, mouseY, delta)
+        }
 
         moveButton!!.renderTooltip(context, mouseX, mouseY, delta)
         settingsButton!!.renderTooltip(context, mouseX, mouseY, delta)
@@ -76,7 +97,7 @@ class MenuScreen : Screen(Text.literal("Helix Menu")) {
         for (m in ModuleManager.modules) {
             val b = layout.add(ModuleButton(width/2-preInitSizeX/2 + getXFromIndex(ModuleManager.modules.indexOf(m)%3), height/2-preInitSizeY/2 + currY, 200, 20, m.displayName, true, m.toolTip, false, m))
 
-            modules += PosWrapper(b, getXFromIndex(ModuleManager.modules.indexOf(m)%3), currY)
+            modules += PosWrapper(b, getXFromIndex(ModuleManager.modules.indexOf(m)%3), currY, m.filters)
 
             if (mCount == 2) {
                 currY += 20 + 5
@@ -84,18 +105,30 @@ class MenuScreen : Screen(Text.literal("Helix Menu")) {
             } else mCount++
         }
 
-        backgroundBox = layout.add(Box(width/2-preInitSizeX/2, height/2-preInitSizeY/2, preInitSizeX, preInitSizeY, null, false)) as Box
-        actionRowBox = layout.add(Box(width/2-preInitSizeX/2, height/2-preInitSizeY/2-45, preInitSizeX, 20, "Helix", false)) as Box
+        var currX = 5
 
-        moveButton = layout.add(IconButton(width/2+preInitSizeX/2-19,height/2-preInitSizeY/2-45, 20, 20, "⌂", "Move the UI elements") {
+        for (f in Filter.entries) {
+            val fil = layout.add(ToggleButton(width/2-preInitSizeX/2 + currX, height/2-preInitSizeY/2-45-5, 60, 20, " " + f.name, false, "Select a filter", true) {
+                if (it.enabled) selectedFilters += f else selectedFilters -= f
+            })
+
+            filters += PosWrapper(fil, currX, -40)
+
+            currX += 65
+        }
+
+        backgroundBox = layout.add(Box(width/2-preInitSizeX/2, height/2-preInitSizeY/2, preInitSizeX, preInitSizeY, null, false)) as Box
+        actionRowBox = layout.add(Box(width/2-preInitSizeX/2, height/2-preInitSizeY/2-45-40, preInitSizeX, 20, "Helix", false)) as Box
+        filterRowBox = layout.add(Box(width/2-preInitSizeX/2, height/2-preInitSizeY/2-45, preInitSizeX, 30, null, false)) as Box
+
+        moveButton = layout.add(IconButton(width/2+preInitSizeX/2-19,height/2-preInitSizeY/2-45-40, 20, 20, "⌂", "Move the UI elements") {
             Helix.MC.setScreen(UiMoveScreen.INSTANCE)
         }) as IconButton
 
-        settingsButton = layout.add(IconButton(width/2+preInitSizeX/2-43,height/2-preInitSizeY/2-45, 20, 20, "≡", "Open the general settings") {
+        settingsButton = layout.add(IconButton(width/2+preInitSizeX/2-43,height/2-preInitSizeY/2-45-40, 20, 20, "≡", "Open the general settings") {
             Helix.MC.setScreen(SettingsScreen())
         }) as IconButton
-
     }
 
-    data class PosWrapper(val element: HelixUiElement, val xO: Int, val yO: Int)
+    data class PosWrapper(val element: HelixUiElement, val xO: Int, val yO: Int, val filters: List<Filter> = listOf())
 }

@@ -77,3 +77,26 @@ Helix requires the Kotlin language adapter and the Fabric API to work correctly
   ![Format](https://cdn.modrinth.com/data/cached_images/cc9d56a7c154db2f3aef68cc481a1fc3f9cca089.png)
 ## Discord Presence
 Shows some information about the server or world you are on to your friends on discord
+
+## For Developers and Server Owners
+The following example code can be used to block modules from being used on your server.
+In the future, there may be more options for configuring the mod via the server.
+### Json Structure for the payload
+This is the structure to use in the payload of the message sent to the player. Invalid json and incorrect module ids will be ignored. You can find the module ids in the respective modules.
+The ids can always be found in the header of the module and will always be in the following scheme: `moduleName`.
+```json
+{
+  "disabled": [
+    "armorHud",
+    "autoSprint"
+  ]
+}
+```
+### Sending the configuration json in your plugin
+This code can be put for example in the `onJoin` listener. Once disabled, modules stay disabled until the player rejoins the server. 
+Then they need to be disabled again.
+```java
+<player>.sendPluginMessage(<plugin-instance>, "helix:config",
+     <json-payload>.toByteArray()
+);
+```

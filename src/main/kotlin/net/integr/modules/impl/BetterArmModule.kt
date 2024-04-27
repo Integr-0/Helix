@@ -5,13 +5,14 @@ package net.integr.modules.impl
 import net.integr.event.RenderArmEvent
 import net.integr.event.RenderHeldItemEvent
 import net.integr.eventsystem.EventListen
+import net.integr.modules.filters.Filter
 import net.integr.modules.management.Module
 import net.integr.modules.management.settings.impl.BooleanSetting
 import net.integr.modules.management.settings.impl.SliderSetting
 import net.minecraft.util.Hand
 import net.minecraft.util.math.RotationAxis
 
-class BetterArmModule : Module("BetterArm", "Changes rendering of your hand", "betterArm") {
+class BetterArmModule : Module("BetterArm", "Changes rendering of your hand", "betterArm", listOf(Filter.Render)) {
     init {
         settings
             .add(BooleanSetting("Offhand", "Toggle rendering the offhand differently", "offhand"))

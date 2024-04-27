@@ -4,13 +4,14 @@ import net.integr.Helix
 import net.integr.Variables
 import net.integr.event.RenderWorldEvent
 import net.integr.eventsystem.EventListen
+import net.integr.modules.filters.Filter
 import net.integr.modules.management.Module
 import net.integr.modules.management.settings.impl.BooleanSetting
 import net.integr.rendering.RenderingEngine
 import net.integr.utilities.CoordinateUtils
 import net.minecraft.util.math.Vec3d
 
-class CosmeticsModule : Module("Cosmetics", "Gives you cosmetics", "cosmetics") {
+class CosmeticsModule : Module("Cosmetics", "Gives you cosmetics", "cosmetics", listOf(Filter.Render)) {
     init {
         settings.add(BooleanSetting("China Hat", "Render a China hat", "chinaHat"))
     }

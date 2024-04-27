@@ -1,13 +1,14 @@
 package net.integr.modules.impl
 
 import net.integr.Helix
+import net.integr.modules.filters.Filter
 import net.integr.modules.management.UiModule
 import net.integr.modules.management.settings.impl.BooleanSetting
 import net.integr.rendering.uisystem.Box
 import net.integr.rendering.uisystem.ToggleButton
 import net.minecraft.client.gui.DrawContext
 
-class KeyStrokesModule : UiModule("Keystrokes", "Renders your Key Inputs", "keystrokes", 79, 80) {
+class KeyStrokesModule : UiModule("Keystrokes", "Renders your Key Inputs", "keystrokes", 79, 80, listOf(Filter.Render, Filter.Ui)) {
     init {
         settings.add(BooleanSetting("Spacebar", "Toggle rendering the Spacebar", "spaceBar"))
     }

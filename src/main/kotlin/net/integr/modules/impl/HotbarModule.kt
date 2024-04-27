@@ -3,13 +3,14 @@
 package net.integr.modules.impl
 
 import net.integr.Helix
+import net.integr.modules.filters.Filter
 import net.integr.modules.management.UiModule
 import net.integr.modules.management.settings.impl.BooleanSetting
 import net.integr.rendering.uisystem.Box
 import net.integr.rendering.uisystem.Slider
 import net.minecraft.client.gui.DrawContext
 
-class HotbarModule : UiModule("Hotbar", "Revamps the hotbar", "hotbar", 55, 95 + 95+5) {
+class HotbarModule : UiModule("Hotbar", "Revamps the hotbar", "hotbar", 55, 95 + 95+5, listOf(Filter.Render, Filter.Ui)) {
     init {
         settings.add(BooleanSetting("Locked", "Lock the bars to the vanilla positions", "locked"))
     }

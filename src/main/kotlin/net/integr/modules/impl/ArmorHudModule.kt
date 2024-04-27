@@ -4,12 +4,13 @@ package net.integr.modules.impl
 
 import net.integr.Helix
 import net.integr.Variables
+import net.integr.modules.filters.Filter
 import net.integr.modules.management.UiModule
 import net.integr.modules.management.settings.impl.BooleanSetting
 import net.integr.rendering.uisystem.Box
 import net.minecraft.client.gui.DrawContext
 
-class ArmorHudModule : UiModule("ArmorHud", "Render your armor durability on screen", "armorHud", 85, 60) {
+class ArmorHudModule : UiModule("ArmorHud", "Render your armor durability on screen", "armorHud", 85, 60, listOf(Filter.Render, Filter.Ui)) {
     init {
         settings.add(BooleanSetting("Use Percentage", "Changes the rendering to be % instead of the default rendering", "percent"))
     }

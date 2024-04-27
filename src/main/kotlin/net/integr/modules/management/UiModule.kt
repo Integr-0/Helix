@@ -6,12 +6,13 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.annotations.Expose
 import net.integr.Helix
+import net.integr.modules.filters.Filter
 import net.integr.rendering.uisystem.MovableBox
 import net.minecraft.client.gui.DrawContext
 import java.nio.file.Files
 import java.nio.file.Path
 
-open class UiModule(override var displayName: String, override var toolTip: String, override var id: String, var height: Int, var width: Int) : Module(displayName, toolTip, id) {
+open class UiModule(override var displayName: String, override var toolTip: String, override var id: String, var height: Int, var width: Int, override var filters: List<Filter> = listOf()) : Module(displayName, toolTip, id, filters) {
     @Expose var originX: Int = 20
     @Expose var originY: Int = 20
 

@@ -29,6 +29,16 @@ class ModuleManager {
             LogUtils.sendLog("Loaded ${uiModules.count()} UI module/s")
         }
 
+        fun getById(id: String): Module? {
+            for (m in modules) {
+                if (m.id == id) {
+                    return m
+                }
+            }
+
+            return null
+        }
+
         fun getByClass(klass: KClass<*>): Module? {
             for (m in modules) {
                 if (m.javaClass == klass.java) {

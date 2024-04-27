@@ -7,6 +7,7 @@ import com.google.gson.JsonObject
 import com.google.gson.annotations.Expose
 import net.integr.Helix
 import net.integr.eventsystem.EventSystem
+import net.integr.modules.filters.Filter
 import net.integr.modules.management.settings.SettingsBuilder
 import net.integr.utilities.LogUtils
 import java.io.IOException
@@ -14,16 +15,20 @@ import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.exists
 
-open class Module(open var displayName: String, open var toolTip: String, open var id: String) {
+open class Module(open var displayName: String, open var toolTip: String, open var id: String, open var filters: List<Filter> = listOf()) {
     @Expose var enabled = false
     @Expose var settings: SettingsBuilder = SettingsBuilder()
 
+    private var locked = false;
+
     fun enable() {
+        if (locked) return
         enabled = true
         EventSystem.register(this)
     }
 
     fun setState(en: Boolean) {
+        if (locked) return
         enabled = en
         if (en) EventSystem.register(this) else EventSystem.unRegister(this)
     }
@@ -31,6 +36,15 @@ open class Module(open var displayName: String, open var toolTip: String, open v
     fun disable() {
         enabled = false
         EventSystem.unRegister(this)
+    }
+
+    fun lock() {
+        disable()
+        locked = true
+    }
+
+    fun unlock() {
+        locked = false
     }
 
     fun isEnabled(): Boolean {

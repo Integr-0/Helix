@@ -1,12 +1,13 @@
 package net.integr.modules.impl
 
 import net.integr.Helix
+import net.integr.modules.filters.Filter
 import net.integr.modules.management.UiModule
 import net.integr.modules.management.settings.impl.BooleanSetting
 import net.integr.rendering.uisystem.Box
 import net.minecraft.client.gui.DrawContext
 
-class CoordinatesModule : UiModule("Coordinates", "Renders your Coordinates", "coordinates", 60,100) {
+class CoordinatesModule : UiModule("Coordinates", "Renders your Coordinates", "coordinates", 60,100, listOf(Filter.Render, Filter.Ui)) {
     init {
         settings.add(BooleanSetting("Swap X and Y", "Swap Coordinates to protect yourself", "swapXY"))
         settings.add(BooleanSetting("Swap Y and Z", "Swap Coordinates to protect yourself", "swapYZ"))
