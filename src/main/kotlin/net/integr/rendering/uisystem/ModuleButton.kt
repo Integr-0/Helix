@@ -1,3 +1,5 @@
+@file:Suppress("DuplicatedCode")
+
 package net.integr.rendering.uisystem
 
 import net.integr.Helix
@@ -15,7 +17,7 @@ import org.jetbrains.annotations.Nullable
 import org.lwjgl.glfw.GLFW
 
 @Suppress("MemberVisibilityCanBePrivate")
-class ModuleButton(var xPos: Int, var yPos: Int, var xSize: Int, var ySize: Int, @Nullable var text: String?, var textCentered: Boolean, var tooltip: String, var outlined: Boolean, var module: Module) : Drawable, HelixUiElement {
+class ModuleButton(var xPos: Int, var yPos: Int, var xSize: Int, var ySize: Int, @Nullable var text: String?, var textCentered: Boolean, var tooltip: String, var outlined: Boolean, var module: Module, var runnable: Runnable) : Drawable, HelixUiElement {
     var textColor: Int = 0
 
 
@@ -90,6 +92,7 @@ class ModuleButton(var xPos: Int, var yPos: Int, var xSize: Int, var ySize: Int,
 
             if (mouseX.toInt() in (x1 + 1)..<x2 && mouseY > y1 && mouseY < y2) {
                 if (module.settings.options.isNotEmpty()) {
+                    runnable.run()
                     Helix.MC.setScreen(ModuleScreen(module))
                     Helix.MC.soundManager.play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F))
                 }

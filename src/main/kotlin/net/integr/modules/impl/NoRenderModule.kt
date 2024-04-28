@@ -10,7 +10,7 @@ import net.integr.modules.management.settings.impl.BooleanSetting
 import net.minecraft.entity.EntityType
 import net.minecraft.particle.ParticleTypes
 
-class NoRenderModule : Module("NoRender", "Disables rendering of some things", "noRender", listOf(Filter.Render)) {
+class NoRenderModule : Module("NoRender", "Disables rendering of some things", "noRender", listOf(Filter.Render, Filter.Tweak)) {
     init {
         settings
             .add(BooleanSetting("No Items", "Disable Items", "items"))

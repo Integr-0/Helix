@@ -10,6 +10,9 @@
   "client": [
     "ArmorFeatureRendererMixin",
     "BlockMixin",
+    "ClientConnectionMixin",
+    "ClientPlayerEntityMixin",
+    "ClientPlayerInteractionManagerMixin",
     "ClientPlayNetworkHandlerMixin",
     "EntityRendererMixin",
     "GameRendererMixin",
@@ -19,8 +22,6 @@
     "LivingEntityRendererMixin",
     "MinecraftClientMixin",
     "TitleScreenMixin",
-    "WorldRendererMixin",
-    "ClientConnectionMixin"
-
+    "WorldRendererMixin"
   ]
 }

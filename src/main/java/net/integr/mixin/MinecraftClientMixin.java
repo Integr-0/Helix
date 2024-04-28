@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MinecraftClient.class)
 public class MinecraftClientMixin {
@@ -46,5 +47,21 @@ public class MinecraftClientMixin {
     @Inject(method = "joinWorld", at = @At("HEAD"))
     public void onJoinWorld(ClientWorld world, CallbackInfo ci) {
         EventSystem.Companion.post(new JoinWorldEvent(world));
+    }
+
+    @Inject(method = "doItemUse", at = @At("HEAD"), cancellable = true)
+    public void onItemUse(CallbackInfo ci) {
+        ItemUseEvent e = new ItemUseEvent();
+        EventSystem.Companion.post(e);
+
+        if (e.isCancelled()) ci.cancel();
+    }
+
+    @Inject(method = "doAttack", at = @At("HEAD"), cancellable = true)
+    public void onAttack(CallbackInfoReturnable<Boolean> cir) {
+        AttackEvent e = new AttackEvent();
+        EventSystem.Companion.post(e);
+
+        if (e.isCancelled()) cir.setReturnValue(false);
     }
 }

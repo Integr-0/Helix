@@ -13,7 +13,7 @@ import net.integr.utilities.Evaluator
 import java.awt.Color
 
 
-class ChatFormatModule : Module("Chat Format", "Chat formatter (Details on the Modrinth page)", "chatFormat", listOf(Filter.Util)){
+class ChatFormatModule : Module("Chat Format", "Chat formatter (Details on the Modrinth page)", "chatFormat", listOf(Filter.Tweak)){
     init {
         settings
             .add(BooleanSetting("Gradients", "Enable the gradient generator formatting option", "gradients"))

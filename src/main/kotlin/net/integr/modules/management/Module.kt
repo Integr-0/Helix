@@ -74,4 +74,11 @@ open class Module(open var displayName: String, open var toolTip: String, open v
         this.enabled = jsonObj["enabled"].asBoolean
         this.settings = settings.load(jsonObj)
     }
+
+    fun getSearchingTags(): List<String> {
+        val fList: MutableList<String> = mutableListOf()
+        for (filter in filters) {fList += filter.name.lowercase().filter { it != ' ' }}
+
+        return listOf(displayName.lowercase().filter { it != ' ' }, toolTip.lowercase().filter { it != ' ' }, id.lowercase().filter { it != ' ' }, fList.joinToString(""))
+    }
 }

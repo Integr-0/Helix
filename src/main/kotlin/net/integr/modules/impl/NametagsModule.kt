@@ -14,7 +14,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import kotlin.math.roundToInt
 
-class NametagsModule : Module("Nametags", "Changes the nametags", "nametags", listOf(Filter.Render)) {
+class NametagsModule : Module("Nametags", "Changes the nametags", "nametags", listOf(Filter.Render, Filter.Tweak)) {
     init {
         settings.add(BooleanSetting("Render Own", "Render your own Nametag", "own"))
         settings.add(BooleanSetting("Healthtags", "Render healthtags", "healthTags"))

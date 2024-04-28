@@ -16,6 +16,10 @@ class UiLayout {
         l.clear()
     }
 
+    fun isLocked(obj: HelixUiElement): Boolean {
+        return l[obj]!!
+    }
+
     fun onClick(mouseX: Double, mouseY: Double, button: Int) {
         for ((e, lo) in l) {
             if (lo) continue

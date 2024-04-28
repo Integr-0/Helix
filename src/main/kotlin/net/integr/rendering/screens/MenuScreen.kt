@@ -10,6 +10,8 @@ import net.integr.rendering.uisystem.base.HelixUiElement
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.text.Text
+import net.minecraft.util.Formatting
+import org.lwjgl.glfw.GLFW
 
 class MenuScreen : Screen(Text.literal("Helix Menu")) {
     companion object {
@@ -25,6 +27,10 @@ class MenuScreen : Screen(Text.literal("Helix Menu")) {
     private var actionRowBox: Box? = null
     private var filterRowBox: Box? = null
 
+    private var searchBar: Box? = null
+    private var search = ""
+    private var shiftDown = false
+
     private var moveButton: IconButton? = null
     private var settingsButton: IconButton? = null
 
@@ -34,30 +40,42 @@ class MenuScreen : Screen(Text.literal("Helix Menu")) {
     private val modules: MutableList<PosWrapper> = mutableListOf()
 
     override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
-        backgroundBox!!.update(width/2-preInitSizeX/2, height/2-preInitSizeY/2).render(context, mouseX, mouseY, delta)
-        actionRowBox!!.update(width/2-preInitSizeX/2, height/2-preInitSizeY/2-45-40).render(context, mouseX, mouseY, delta)
-        filterRowBox!!.update(width/2-preInitSizeX/2, height/2-preInitSizeY/2-45).render(context, mouseX, mouseY, delta)
+        backgroundBox!!.update(width / 2 - preInitSizeX / 2, height / 2 - preInitSizeY / 2).render(context, mouseX, mouseY, delta)
+        actionRowBox!!.update(width / 2 - preInitSizeX / 2, height / 2 - preInitSizeY / 2 - 45 - 40).render(context, mouseX, mouseY, delta)
+        filterRowBox!!.update(width / 2 - preInitSizeX / 2, height / 2 - preInitSizeY / 2 - 45).render(context, mouseX, mouseY, delta)
 
-        moveButton!!.update(width/2+preInitSizeX/2-19,height/2-preInitSizeY/2-45-40).render(context, mouseX, mouseY, delta)
-        settingsButton!!.update(width/2+preInitSizeX/2-43,height/2-preInitSizeY/2-45-40).render(context, mouseX, mouseY, delta)
+        moveButton!!.update(width / 2 + preInitSizeX / 2 - 19, height / 2 - preInitSizeY / 2 - 45 - 40).render(context, mouseX, mouseY, delta)
+        settingsButton!!.update(width / 2 + preInitSizeX / 2 - 43, height / 2 - preInitSizeY / 2 - 45 - 40).render(context, mouseX, mouseY, delta)
+
+        searchBar!!.update(width / 2 + preInitSizeX / 2 - 155, height / 2 - preInitSizeY / 2 - 45 + 5).render(context, mouseX, mouseY, delta)
+
+        reloadList()
 
         for (f in filters) {
-            f.element.update(width/2-preInitSizeX/2 + f.xO, height/2-preInitSizeY/2 + f.yO).render(context, mouseX, mouseY, delta)
+            f.element.update(width / 2 - preInitSizeX / 2 + f.xO, height / 2 - preInitSizeY / 2 + f.yO).render(context, mouseX, mouseY, delta)
         }
 
-        outer@for (l in modules) {
-            for (f in selectedFilters) if (l.filters.contains(f)) {
+        outer@ for (l in modules) {
+            for (f in selectedFilters) if (!l.filters.contains(f)) {
+                layout.lock(l.element)
+                continue@outer
+            }
+
+            if (!matchesSearchingPredicate(search, l.searchingTags)) {
                 layout.lock(l.element)
                 continue@outer
             }
 
             layout.unLock(l.element)
-            l.element.update(width/2-preInitSizeX/2 + l.xO, height/2-preInitSizeY/2 + l.yO).render(context, mouseX, mouseY, delta)
+            l.element.update(width / 2 - preInitSizeX / 2 + l.xO, height / 2 - preInitSizeY / 2 + l.yO).render(context, mouseX, mouseY, delta)
         }
 
         for (f in filters) f.element.renderTooltip(context, mouseX, mouseY, delta)
-        outer@for (l in modules) {
+
+        outer@ for (l in modules) {
             for (f in selectedFilters) if (!l.filters.contains(f)) continue@outer
+
+            if (!matchesSearchingPredicate(search, l.searchingTags)) continue@outer
             l.element.renderTooltip(context, mouseX, mouseY, delta)
         }
 
@@ -95,9 +113,12 @@ class MenuScreen : Screen(Text.literal("Helix Menu")) {
         var mCount = 0
 
         for (m in ModuleManager.modules) {
-            val b = layout.add(ModuleButton(width/2-preInitSizeX/2 + getXFromIndex(ModuleManager.modules.indexOf(m)%3), height/2-preInitSizeY/2 + currY, 200, 20, m.displayName, true, m.toolTip, false, m))
+            val b = layout.add(ModuleButton(width / 2 - preInitSizeX / 2 + getXFromIndex(ModuleManager.modules.indexOf(m) % 3), height / 2 - preInitSizeY / 2 + currY, 200, 20, m.displayName, true, m.toolTip, false, m) {
+                search = ""
+                searchBar!!.text = "Search modules..."
+            })
 
-            modules += PosWrapper(b, getXFromIndex(ModuleManager.modules.indexOf(m)%3), currY, m.filters)
+            modules += PosWrapper(b, getXFromIndex(ModuleManager.modules.indexOf(m) % 3), currY, m.filters, m.getSearchingTags())
 
             if (mCount == 2) {
                 currY += 20 + 5
@@ -108,27 +129,118 @@ class MenuScreen : Screen(Text.literal("Helix Menu")) {
         var currX = 5
 
         for (f in Filter.entries) {
-            val fil = layout.add(ToggleButton(width/2-preInitSizeX/2 + currX, height/2-preInitSizeY/2-45-5, 60, 20, " " + f.name, false, "Select a filter", true) {
+            val fil = layout.add(ToggleButton(width / 2 - preInitSizeX / 2 + currX, height / 2 - preInitSizeY / 2 - 45 - 5, 65, 20, " " + f.name, true, "Select a filter", true) {
                 if (it.enabled) selectedFilters += f else selectedFilters -= f
             })
 
             filters += PosWrapper(fil, currX, -40)
 
-            currX += 65
+            currX += 70
         }
 
-        backgroundBox = layout.add(Box(width/2-preInitSizeX/2, height/2-preInitSizeY/2, preInitSizeX, preInitSizeY, null, false)) as Box
-        actionRowBox = layout.add(Box(width/2-preInitSizeX/2, height/2-preInitSizeY/2-45-40, preInitSizeX, 20, "Helix", false)) as Box
-        filterRowBox = layout.add(Box(width/2-preInitSizeX/2, height/2-preInitSizeY/2-45, preInitSizeX, 30, null, false)) as Box
+        backgroundBox = layout.add(Box(width / 2 - preInitSizeX / 2, height / 2 - preInitSizeY / 2, preInitSizeX, preInitSizeY, null, false)) as Box
 
-        moveButton = layout.add(IconButton(width/2+preInitSizeX/2-19,height/2-preInitSizeY/2-45-40, 20, 20, "⌂", "Move the UI elements") {
+        actionRowBox = layout.add(Box(width / 2 - preInitSizeX / 2, height / 2 - preInitSizeY / 2 - 45 - 40, preInitSizeX, 20, "Helix", false)) as Box
+        filterRowBox = layout.add(Box(width / 2 - preInitSizeX / 2, height / 2 - preInitSizeY / 2 - 45, preInitSizeX, 30, null, false)) as Box
+
+        searchBar = layout.add(Box(width / 2 + preInitSizeX / 2 - 155, height / 2 - preInitSizeY / 2 - 45 + 5, 150, 20, "" + Formatting.ITALIC + "Search modules...", false, innerIsDisabled = true)) as Box
+
+        moveButton = layout.add(IconButton(width / 2 + preInitSizeX / 2 - 19, height / 2 - preInitSizeY / 2 - 45 - 40, 20, 20, "⌂", "Move the UI elements") {
             Helix.MC.setScreen(UiMoveScreen.INSTANCE)
         }) as IconButton
 
-        settingsButton = layout.add(IconButton(width/2+preInitSizeX/2-43,height/2-preInitSizeY/2-45-40, 20, 20, "≡", "Open the general settings") {
+        settingsButton = layout.add(IconButton(width / 2 + preInitSizeX / 2 - 43, height / 2 - preInitSizeY / 2 - 45 - 40, 20, 20, "≡", "Open the general settings") {
             Helix.MC.setScreen(SettingsScreen())
         }) as IconButton
     }
 
-    data class PosWrapper(val element: HelixUiElement, val xO: Int, val yO: Int, val filters: List<Filter> = listOf())
+    data class PosWrapper(
+        val element: HelixUiElement,
+        var xO: Int,
+        var yO: Int,
+        val filters: List<Filter> = listOf(),
+        val searchingTags: List<String> = listOf()
+    )
+
+    private fun reloadList() {
+        var currY = 5
+        var mCount = 0
+
+        for (pw in modules) {
+            if (layout.isLocked(pw.element)) continue
+
+            pw.xO = getXFromIndex(modules.filter { !layout.isLocked(it.element) }.indexOf(pw) % 3)
+            pw.yO = currY
+
+            if (mCount == 2) {
+                currY += 20 + 5
+                mCount = 0
+            } else mCount++
+        }
+    }
+
+    private fun matchesSearchingPredicate(search: String, tags: List<String>): Boolean {
+        for (t in tags) {
+            for (ta in tags) {
+                if (ta.contains(search.lowercase().filter { it != ' ' })) return true
+            }
+        }
+
+        return false
+    }
+
+    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        when (keyCode) {
+            GLFW.GLFW_KEY_BACKSPACE -> {
+                if (search.isNotEmpty()) search = search.substring(0, search.length - 1)
+            }
+
+            GLFW.GLFW_KEY_RIGHT_SHIFT -> {
+                shiftDown = true
+            }
+
+            GLFW.GLFW_KEY_LEFT_SHIFT -> {
+                shiftDown = true
+            }
+
+            GLFW.GLFW_KEY_ESCAPE -> {
+                search = ""
+            }
+
+            GLFW.GLFW_KEY_SPACE -> {
+                search += " "
+            }
+
+            else -> {
+                if (shiftDown) {
+                    val kn = GLFW.glfwGetKeyName(keyCode, scanCode)
+                    if (kn != null) search += kn.uppercase()
+                } else {
+                    val kn = GLFW.glfwGetKeyName(keyCode, scanCode)
+                    if (kn != null) search += kn
+                }
+            }
+        }
+
+        if (search == "") {
+            searchBar!!.text = "" + Formatting.ITALIC + "Search modules..."
+        } else {
+            searchBar!!.text = search
+        }
+
+        return super.keyPressed(keyCode, scanCode, modifiers)
+    }
+
+    override fun keyReleased(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        when (keyCode) {
+            GLFW.GLFW_KEY_RIGHT_SHIFT -> {
+                shiftDown = false
+            }
+            GLFW.GLFW_KEY_LEFT_SHIFT -> {
+                shiftDown = false
+            }
+        }
+
+        return super.keyReleased(keyCode, scanCode, modifiers)
+    }
 }

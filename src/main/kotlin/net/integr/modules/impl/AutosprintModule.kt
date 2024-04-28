@@ -6,7 +6,7 @@ import net.integr.eventsystem.EventListen
 import net.integr.modules.filters.Filter
 import net.integr.modules.management.Module
 
-class AutosprintModule : Module("Autosprint", "Sprints for you", "autoSprint", listOf(Filter.Util)) {
+class AutosprintModule : Module("Autosprint", "Sprints for you", "autoSprint", listOf(Filter.Tweak)) {
     @EventListen
     fun onPreTick(event: PreTickEvent) {
         if (!Helix.MC.options.sprintKey.isPressed) Helix.MC.options.sprintKey.isPressed = true

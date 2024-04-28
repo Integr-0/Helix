@@ -9,7 +9,7 @@ import net.minecraft.client.gui.Drawable
 import org.jetbrains.annotations.Nullable
 
 @Suppress("MemberVisibilityCanBePrivate")
-class Box(var xPos: Int, var yPos: Int, var xSize: Int, var ySize: Int, @Nullable var text: String?, var textCentered: Boolean, var outlined: Boolean = true) : Drawable, HelixUiElement {
+class Box(var xPos: Int, var yPos: Int, var xSize: Int, var ySize: Int, @Nullable var text: String?, var textCentered: Boolean, var outlined: Boolean = true, var innerIsDisabled: Boolean = false) : Drawable, HelixUiElement {
     override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         val color = Variables.guiBack
         val textColor = Variables.guiColor
@@ -19,7 +19,9 @@ class Box(var xPos: Int, var yPos: Int, var xSize: Int, var ySize: Int, @Nullabl
         val y2 = yPos + ySize
 
         if (outlined) {
-            RenderingEngine.TwoDimensional.fillRound(x1.toFloat(), y1.toFloat(), x2.toFloat(), y2.toFloat(), color, textColor, context, 0.05f, 9f)
+            if (innerIsDisabled) {
+                RenderingEngine.TwoDimensional.fillRound(x1.toFloat(), y1.toFloat(), x2.toFloat(), y2.toFloat(), Variables.guiDisabled, textColor, context, 0.05f, 9f)
+            } else RenderingEngine.TwoDimensional.fillRound(x1.toFloat(), y1.toFloat(), x2.toFloat(), y2.toFloat(), color, textColor, context, 0.05f, 9f)
         } else {
             RenderingEngine.TwoDimensional.fillRoundNoOutline(x1.toFloat(), y1.toFloat(), x2.toFloat(), y2.toFloat(), color, context, 0.05f, 9f)
         }
