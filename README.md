@@ -43,7 +43,9 @@ Helix requires the Kotlin language adapter and the Fabric API to work correctly
 - ### Light
   ![Light](https://cdn.modrinth.com/data/cached_images/69b7901b52164e02c1ec36109cd6d2c01d14b8f8.png)
 
-## Ingame features
+## In-Game features
+- ### Crystal Optimizer
+  Optimized the placing and breaking of crystals clientside to improve crystal speed (removing broken crystals on the client...)
 - ### Block Outline
   Changes your block outline and adds optional entity outlines
 - ### Armor Hud
