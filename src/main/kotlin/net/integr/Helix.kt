@@ -4,6 +4,7 @@ import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.loader.api.FabricLoader
+import net.integr.commands.CommandRegistry
 import net.integr.discord.PresenceHandler
 import net.integr.event.ClientEndEvent
 import net.integr.event.JoinWorldEvent
@@ -19,6 +20,7 @@ import net.integr.rendering.screens.GameScreen
 import net.integr.rendering.screens.MenuScreen
 import net.integr.rendering.uisystem.Box
 import net.integr.servercommunicator.ServerCommunication
+import net.integr.utilities.CommandSender
 import net.integr.utilities.LogUtils
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.option.KeyBinding
@@ -30,19 +32,20 @@ import org.slf4j.LoggerFactory
 import java.awt.Color
 import java.nio.file.Path
 
+
 class Helix : ClientModInitializer, ModInitializer {
 
     companion object {
         val MC: MinecraftClient = MinecraftClient.getInstance()
         val LOGGER: Logger = LoggerFactory.getLogger("Helix")
         val VERSION: String = FabricLoader.getInstance().getModContainer("helix").get().metadata.version.toString()
-        val CONFIG: Path = Path.of(
-            FabricLoader.getInstance().configDir.toString().substringBeforeLast("config") + "helix"
-        )
+        val CONFIG: Path = Path.of(FabricLoader.getInstance().configDir.toString().substringBeforeLast("config") + "helix")
         const val DISCORD_ID = "1229042491815104594"
+
+        var openKey: KeyBinding? = null
+
     }
 
-    private var openKey: KeyBinding? = null
     private var startTime = 0L
 
     private var branding: Box = Box(4, 49, 110, 40, null, false, true)
@@ -56,14 +59,7 @@ class Helix : ClientModInitializer, ModInitializer {
     }
 
     override fun onInitialize() {
-        openKey = KeyBindingHelper.registerKeyBinding(
-            KeyBinding(
-                "key.helix.openmenu",
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_RIGHT_SHIFT,
-                "category.helix"
-            )
-        )
+        openKey = KeyBindingHelper.registerKeyBinding(KeyBinding("key.helix.openmenu", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_SHIFT, "category.helix"))
 
         startTime = System.currentTimeMillis()
         LogUtils.sendLog("Helix startup...")
@@ -76,6 +72,7 @@ class Helix : ClientModInitializer, ModInitializer {
         LogUtils.sendLog("Helix started [${System.currentTimeMillis() - startTime}ms]")
 
         PresenceHandler.start()
+        CommandRegistry.init()
 
         savingThread.name = "Helix Save-Thread"
         savingThread.start()

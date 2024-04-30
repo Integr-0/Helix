@@ -36,17 +36,19 @@ class BlockOutlineModule : Module("Block Outline", "Changes your block outline",
                 }
             }
         } else if (t?.type == HitResult.Type.ENTITY && settings.getById<BooleanSetting>("entityBox")!!.isEnabled()) {
-            when (settings.getById<CyclerSetting>("mode")!!.getElement()) {
-                "Full" -> {
-                    RenderingEngine.ThreeDimensional.box(CoordinateUtils.getEntityBox((t as EntityHitResult).entity), CoordinateUtils.getLerpedEntityPos(t.entity, event.tickDelta), event.matrices, Variables.guiColor)
-                }
+            val te = t as EntityHitResult
 
-                "Lines" -> {
-                    RenderingEngine.ThreeDimensional.outlinedBox(CoordinateUtils.getEntityBox((t as EntityHitResult).entity), CoordinateUtils.getLerpedEntityPos(t.entity, event.tickDelta), event.matrices, Variables.guiColor)
+            if (!te.entity.isInvisible) {
+                when (settings.getById<CyclerSetting>("mode")!!.getElement()) {
+                    "Full" -> {
+                        RenderingEngine.ThreeDimensional.box(CoordinateUtils.getEntityBox(te.entity), CoordinateUtils.getLerpedEntityPos(te.entity, event.tickDelta), event.matrices, Variables.guiColor)
+                    }
+
+                    "Lines" -> {
+                        RenderingEngine.ThreeDimensional.outlinedBox(CoordinateUtils.getEntityBox(te.entity), CoordinateUtils.getLerpedEntityPos(te.entity, event.tickDelta), event.matrices, Variables.guiColor)
+                    }
                 }
             }
         }
-
-
     }
 }

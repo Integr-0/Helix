@@ -10,6 +10,10 @@ class LogUtils {
             Helix.MC.player!!.sendMessage(Text.literal("" + Formatting.GOLD + "[Helix]" + Formatting.DARK_GRAY + " » " + Formatting.GRAY + str))
         }
 
+        fun getChatLog(str: String): Text {
+            return Text.literal("" + Formatting.GOLD + "[Helix]" + Formatting.DARK_GRAY + " » " + Formatting.GRAY + str)
+        }
+
         fun sendLog(str: String) {
             Helix.LOGGER.info("[Helix] » $str")
         }

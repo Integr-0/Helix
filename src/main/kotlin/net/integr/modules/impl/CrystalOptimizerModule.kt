@@ -2,17 +2,11 @@ package net.integr.modules.impl
 
 import net.integr.Helix
 import net.integr.event.AttackEvent
-import net.integr.event.BlockBreakEvent
-import net.integr.event.ItemUseEvent
-import net.integr.event.PreTickEvent
 import net.integr.event.SendPacketEvent
-import net.integr.event.SwingHandEvent
 import net.integr.eventsystem.EventListen
 import net.integr.modules.filters.Filter
 import net.integr.modules.management.Module
 import net.integr.modules.management.settings.impl.BooleanSetting
-import net.integr.modules.management.settings.impl.CyclerSetting
-import net.integr.utilities.LogUtils
 import net.minecraft.block.Blocks
 import net.minecraft.entity.Entity
 import net.minecraft.entity.decoration.EndCrystalEntity

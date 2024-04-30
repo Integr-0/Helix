@@ -28,6 +28,7 @@ public abstract class ClientPlayNetworkHandlerMixin {
     @Shadow private LastSeenMessagesCollector lastSeenMessagesCollector;
 
 
+
     @Shadow protected abstract ParseResults<CommandSource> parse(String command);
 
     @Inject(method = "sendChatMessage", at = @At("HEAD"), cancellable = true)
