@@ -81,6 +81,19 @@ Helix requires the Kotlin language adapter and the Fabric API to work correctly
   ![Format](https://cdn.modrinth.com/data/cached_images/cc9d56a7c154db2f3aef68cc481a1fc3f9cca089.png)
   
   Also has the option so solve simple math, for example ```<solve>1+2*(27-5)/5<solve>```
+
+## Commands
+- ### /helix
+  Opens the main UI
+- ### /gmc [player]
+  Puts you or the optionally specified player in creative mode (only works if you have permission on the server since we are just redirecting commands)
+- ### /gms [player]
+  Puts you or the optionally specified player in survival mode (only works if you have permission on the server since we are just redirecting commands)
+- ### /gma [player]
+  Puts you or the optionally specified player in adventure mode (only works if you have permission on the server since we are just redirecting commands)
+- ### /gmsp [player]
+  Puts you or the optionally specified player in spectator mode (only works if you have permission on the server since we are just redirecting commands)
+
 ## Discord Presence
 Shows some information about the server or world you are on to your friends on discord
 
