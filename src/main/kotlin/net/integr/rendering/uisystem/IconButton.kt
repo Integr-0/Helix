@@ -20,7 +20,10 @@ package net.integr.rendering.uisystem
 
 import kotlinx.coroutines.Runnable
 import net.integr.Helix
+import net.integr.Settings
 import net.integr.Variables
+import net.integr.modules.management.settings.impl.SliderSetting
+import net.integr.rendering.RenderingEngine
 import net.integr.rendering.uisystem.base.HelixUiElement
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.Drawable
@@ -37,16 +40,17 @@ class IconButton(var xPos: Int, var yPos: Int, var xSize: Int, var ySize: Int, v
         val x1 = xPos
         val y1 = yPos
 
-        context.drawText(Helix.MC.textRenderer, text, x1 + xSize / 2 - Helix.MC.textRenderer.getWidth(text) / 2 - 4, y1 + ySize / 2 - 4, colorEnabled, false)
+        RenderingEngine.Text.drawScaled(context, text, x1 + xSize / 2 - Helix.MC.textRenderer.getWidth(text) / 2 - 4, y1 + ySize / 2 - 4, colorEnabled)
     }
 
     override fun renderTooltip(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
-        val x1 = xPos
-        val x2 = xPos + xSize
-        val y1 = yPos
-        val y2 = yPos + ySize
+        val x1 = RenderingEngine.Misc.scale(xPos)
+        val x2 = RenderingEngine.Misc.scale(xPos + xSize)
+        val y1 = RenderingEngine.Misc.scale(yPos)
+        val y2 = RenderingEngine.Misc.scale(yPos + ySize)
 
-        if (mouseX in (x1 + 1)..<x2 && mouseY > y1 && mouseY < y2) {
+
+        if (RenderingEngine.Misc.scale(mouseX) in (x1 + 1)..<x2 && RenderingEngine.Misc.scale(mouseY) > y1 && RenderingEngine.Misc.scale(mouseY) < y2) {
             val explainXSize: Int = Helix.MC.textRenderer.getWidth(tooltip) + 30
             val explainingBox = Box(xPos, yPos, explainXSize, ySize, tooltip, true)
 
@@ -58,12 +62,13 @@ class IconButton(var xPos: Int, var yPos: Int, var xSize: Int, var ySize: Int, v
 
     override fun onClick(mouseX: Double, mouseY: Double, button: Int) {
         if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
-            val x1 = xPos
-            val x2 = xPos + xSize
-            val y1 = yPos
-            val y2 = yPos + ySize
+            val x1 = RenderingEngine.Misc.scale(xPos)
+            val x2 = RenderingEngine.Misc.scale(xPos + xSize)
+            val y1 = RenderingEngine.Misc.scale(yPos)
+            val y2 = RenderingEngine.Misc.scale(yPos + ySize)
 
-            if (mouseX.toInt() in (x1 + 1)..<x2 && mouseY > y1 && mouseY < y2) {
+
+            if (RenderingEngine.Misc.scale(mouseX) in (x1 + 1)..<x2 && RenderingEngine.Misc.scale(mouseY) > y1 && RenderingEngine.Misc.scale(mouseY) < y2) {
                 action.run()
                 Helix.MC.soundManager.play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F))
             }

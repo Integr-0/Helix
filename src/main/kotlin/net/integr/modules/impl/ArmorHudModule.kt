@@ -20,10 +20,13 @@
 package net.integr.modules.impl
 
 import net.integr.Helix
+import net.integr.Settings
 import net.integr.Variables
 import net.integr.modules.filters.Filter
 import net.integr.modules.management.UiModule
 import net.integr.modules.management.settings.impl.BooleanSetting
+import net.integr.modules.management.settings.impl.SliderSetting
+import net.integr.rendering.RenderingEngine
 import net.integr.rendering.uisystem.Box
 import net.minecraft.client.gui.DrawContext
 
@@ -55,10 +58,10 @@ class ArmorHudModule : UiModule("ArmorHud", "Render your armor durability on scr
             val leggingsPercent = if (leggingsItem.maxDamage != 0) (leggingsItem.maxDamage.toDouble() - leggingsItem.damage.toDouble()) / (leggingsItem.maxDamage.toDouble()) * 100.0 else 0
             val bootsPercent = if (bootsItem.maxDamage != 0) (bootsItem.maxDamage.toDouble() - bootsItem.damage.toDouble()) / (bootsItem.maxDamage.toDouble()) * 100.0 else 0
 
-            context.drawText(Helix.MC.textRenderer, "${if (helmetPercent.toInt() > 0) helmetPercent.toInt() else "- "}%", originX+25, originY+5+4, Variables.guiColor, false)
-            context.drawText(Helix.MC.textRenderer, "${if (chestPlatePercent.toInt() > 0) chestPlatePercent.toInt() else "- "}%", originX+25, originY+25+4, Variables.guiColor, false)
-            context.drawText(Helix.MC.textRenderer, "${if (leggingsPercent.toInt() > 0) leggingsPercent.toInt() else "- "}%", originX+25, originY+45+4, Variables.guiColor, false)
-            context.drawText(Helix.MC.textRenderer, "${if (bootsPercent.toInt() > 0) bootsPercent.toInt() else "- "}%", originX+25, originY+65+4, Variables.guiColor, false)
+            RenderingEngine.Text.drawScaled(context, "${if (helmetPercent.toInt() > 0) helmetPercent.toInt() else "- "}%", originX+25, originY+5+4, Variables.guiColor)
+            RenderingEngine.Text.drawScaled(context, "${if (chestPlatePercent.toInt() > 0) chestPlatePercent.toInt() else "- "}%", originX+25, originY+25+4, Variables.guiColor)
+            RenderingEngine.Text.drawScaled(context, "${if (leggingsPercent.toInt() > 0) leggingsPercent.toInt() else "- "}%", originX+25, originY+45+4, Variables.guiColor)
+            RenderingEngine.Text.drawScaled(context, "${if (bootsPercent.toInt() > 0) bootsPercent.toInt() else "- "}%", originX+25, originY+65+4, Variables.guiColor)
         } else {
             background.xSize = 75
             super.width = 75
@@ -69,10 +72,11 @@ class ArmorHudModule : UiModule("ArmorHud", "Render your armor durability on scr
             context.drawItem(leggingsItem, originX + 5, originY + 45)
             context.drawItem(bootsItem, originX + 5, originY + 65)
 
-            context.drawText(Helix.MC.textRenderer, if (helmetItem.maxDamage > 0) "${helmetItem.maxDamage - helmetItem.damage}/${helmetItem.maxDamage}" else "-", originX+25, originY+5+4, Variables.guiColor, false)
-            context.drawText(Helix.MC.textRenderer, if (chestPlateItem.maxDamage > 0) "${chestPlateItem.maxDamage - chestPlateItem.damage}/${chestPlateItem.maxDamage}" else "-", originX+25, originY+25+4, Variables.guiColor, false)
-            context.drawText(Helix.MC.textRenderer, if (leggingsItem.maxDamage > 0) "${leggingsItem.maxDamage - leggingsItem.damage}/${leggingsItem.maxDamage}" else "-", originX+25, originY+45+4, Variables.guiColor, false)
-            context.drawText(Helix.MC.textRenderer, if (bootsItem.maxDamage > 0) "${bootsItem.maxDamage - bootsItem.damage}/${bootsItem.maxDamage}" else "-", originX+25, originY+65+4, Variables.guiColor, false)
+
+            RenderingEngine.Text.drawScaled(context, if (helmetItem.maxDamage > 0) "${helmetItem.maxDamage - helmetItem.damage}/${helmetItem.maxDamage}" else "-", originX+25, originY+5+4, Variables.guiColor)
+            RenderingEngine.Text.drawScaled(context, if (chestPlateItem.maxDamage > 0) "${chestPlateItem.maxDamage - chestPlateItem.damage}/${chestPlateItem.maxDamage}" else "-", originX+25, originY+25+4, Variables.guiColor)
+            RenderingEngine.Text.drawScaled(context, if (leggingsItem.maxDamage > 0) "${leggingsItem.maxDamage - leggingsItem.damage}/${leggingsItem.maxDamage}" else "-", originX+25, originY+45+4, Variables.guiColor)
+            RenderingEngine.Text.drawScaled(context, if (bootsItem.maxDamage > 0) "${bootsItem.maxDamage - bootsItem.damage}/${bootsItem.maxDamage}" else "-", originX+25, originY+65+4, Variables.guiColor)
         }
     }
 }

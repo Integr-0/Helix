@@ -24,8 +24,8 @@ import net.integr.rendering.uisystem.Slider
 import net.integr.rendering.uisystem.base.HelixUiElement
 import net.integr.utilities.round
 
-class SliderSetting(private val displayName: String, private val tooltip: String, id: String, private var min: Double, private var max: Double) : Setting(id) {
-    @Expose var value = 0.0
+class SliderSetting(private val displayName: String, private val tooltip: String, id: String, private var min: Double, private var max: Double, private val default: Double = 0.0) : Setting(id) {
+    @Expose var value = default
 
     override fun getUiElement(): HelixUiElement {
         val uie = Slider(0, 0, 200, 20, displayName, true, tooltip, min, max)

@@ -21,6 +21,7 @@ package net.integr.rendering.screens
 import net.integr.Helix
 import net.integr.modules.management.Module
 import net.integr.modules.management.settings.Setting
+import net.integr.rendering.RenderingEngine
 import net.integr.rendering.uisystem.Box
 import net.integr.rendering.uisystem.IconButton
 import net.integr.rendering.uisystem.UiLayout
@@ -42,7 +43,6 @@ class ModuleScreen(mod: Module) : Screen(Text.literal("${mod.displayName} Config
     private val settings: MutableList<PosWrapper> = mutableListOf()
 
     init {
-
         preInitSizeY += mod.settings.options.count() * 25
 
         var currY = 5

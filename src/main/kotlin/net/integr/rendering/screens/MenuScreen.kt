@@ -21,6 +21,7 @@ package net.integr.rendering.screens
 import net.integr.Helix
 import net.integr.modules.filters.Filter
 import net.integr.modules.management.ModuleManager
+import net.integr.rendering.RenderingEngine
 import net.integr.rendering.uisystem.*
 import net.integr.rendering.uisystem.base.HelixUiElement
 import net.minecraft.client.gui.DrawContext

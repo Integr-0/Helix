@@ -22,6 +22,7 @@ import com.google.gson.annotations.Expose
 import net.integr.modules.management.settings.SettingsBuilder
 import net.integr.modules.management.settings.impl.BooleanSetting
 import net.integr.modules.management.settings.impl.CyclerSetting
+import net.integr.modules.management.settings.impl.SliderSetting
 import net.integr.utilities.LogUtils
 import java.io.IOException
 import java.nio.file.Files
@@ -36,7 +37,9 @@ class Settings {
     @Expose var settings: SettingsBuilder = SettingsBuilder()
         .add(CyclerSetting("Accent: ", "The accent for the Client", "accent", mutableListOf("Rgb", "Orange", "Red", "Green", "Yellow", "Pink", "Purple", "Blue")))
         .add(CyclerSetting("Theme: ", "The theme for the Client", "theme", mutableListOf("Dark", "Light")))
+        .add(BooleanSetting("Glow", "Toggle the glowing effects", "glow"))
         .add(BooleanSetting("DiscordRPC", "Toggle the discord Presence", "discordRpc"))
+        .add(SliderSetting("Scale: ", "The External scale of the UI", "scale", 0.8, 1.2, default = 1.0))
 
     fun save() {
         val json = GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create().toJson(this)

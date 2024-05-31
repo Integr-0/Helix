@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-@file:Suppress("DuplicatedCode", "unused")
+@file:Suppress("DuplicatedCode", "unused", "MemberVisibilityCanBePrivate")
 
 package net.integr.rendering
 
 import com.mojang.blaze3d.systems.RenderSystem
 import net.integr.Helix
+import net.integr.Settings
+import net.integr.modules.management.settings.impl.BooleanSetting
+import net.integr.modules.management.settings.impl.SliderSetting
+import net.integr.rendering.RenderingEngine.TwoDimensional.Companion.fillRoundNoOutline
 import net.integr.utilities.CoordinateUtils
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.render.*
@@ -732,6 +736,8 @@ class RenderingEngine {
 
                 val matrix4f = context.matrices.peek().positionMatrix
                 GL11.glEnable(GL11.GL_POLYGON_SMOOTH)
+                GL11.glEnable(GL11.GL_BLEND)
+                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE)
                 GL11.glHint(GL11.GL_POLYGON_SMOOTH_HINT, GL11.GL_NICEST)
 
                 var i: Float
@@ -766,11 +772,54 @@ class RenderingEngine {
                 context.draw()
 
                 GL11.glDisable(GL11.GL_POLYGON_SMOOTH)
+                GL11.glDisable(GL11.GL_BLEND)
+
             }
 
-            fun fillRound(xp1: Float, yp1: Float, xp2: Float, yp2: Float, color: Int, outlineColor: Int, context: DrawContext, precision: Float, radius: Float) {
+            fun fillRound(xp1: Float, yp1: Float, xp2: Float, yp2: Float, color: Int, outlineColor: Int, context: DrawContext, precision: Float, radius: Float, glow: Boolean = true) {
+                if (glow && Settings.INSTANCE.settings.getById<BooleanSetting>("glow")!!.enabled) {
+                    for (i in (2..32) step 4) {
+                        val v = 1+i/10
+                        val tColor = Color(outlineColor)
+                        val colorC = Color(tColor.red, tColor.green, tColor.blue, 4)
+
+                        fillRoundNoOutline(xp1-v, yp1-v, xp2+v, yp2+v, colorC.rgb, context, precision, radius)
+                    }
+                }
+
                 fillRoundNoOutline(xp1-1.1f, yp1-1.1f, xp2+1.1f, yp2+1.1f, outlineColor, context, precision, radius)
+
                 fillRoundNoOutline(xp1, yp1, xp2, yp2, color, context, precision, radius)
+            }
+
+            fun fillRoundScaled(xp1: Float, yp1: Float, xp2: Float, yp2: Float, color: Int, outlineColor: Int, context: DrawContext, precision: Float, radius: Float, glow: Boolean = true) {
+                context.matrices.push()
+                val scale = Settings.INSTANCE.settings.getById<SliderSetting>("scale")!!.getSetValue().toFloat()
+                context.matrices.scale(1f/scale, 1f/scale, 1f/scale)
+
+                fillRound(scale(xp1)-scale(10F)+10, scale(yp1)-scale(10F)+10, scale(xp2)+scale(10F)-10, scale(yp2)+scale(10F)-10, color, outlineColor, context, precision, scaleR(radius), glow)
+
+                context.matrices.pop()
+            }
+
+            fun fillRoundNoOutlineScaled(xp1: Float, yp1: Float, xp2: Float, yp2: Float, color: Int, context: DrawContext, precision: Float, radius: Float) {
+                context.matrices.push()
+                val scale = Settings.INSTANCE.settings.getById<SliderSetting>("scale")!!.getSetValue().toFloat()
+                context.matrices.scale(1f/scale, 1f/scale, 1f/scale)
+
+                fillRoundNoOutline(scale(xp1)-scale(10F)+10, scale(yp1)-scale(10F)+10, scale(xp2)+scale(10F)-10, scale(yp2)+scale(10F)-10, color, context, precision, scaleR(radius))
+
+                context.matrices.pop()
+            }
+
+            private fun scale(f: Float): Float {
+                val scale = Settings.INSTANCE.settings.getById<SliderSetting>("scale")!!.getSetValue().toFloat()
+                return (f*scale)
+            }
+
+            private fun scaleR(f: Float): Float {
+                val scale = Settings.INSTANCE.settings.getById<SliderSetting>("scale")!!.getSetValue().toFloat()/ (1/scale(1F))
+                return (f*scale)
             }
         }
     }
@@ -786,6 +835,34 @@ class RenderingEngine {
                 rainbow[1] = 0.5f + 0.5f * MathHelper.sin((x + 4f / 3f) * pi)
                 rainbow[2] = 0.5f + 0.5f * MathHelper.sin((x + 8f / 3f) * pi)
                 return rainbow
+            }
+
+            fun scale(f: Number): Float {
+                val scale = Settings.INSTANCE.settings.getById<SliderSetting>("scale")!!.getSetValue().toFloat()
+                return (f.toFloat()*scale)
+            }
+        }
+    }
+
+    class Text {
+        companion object {
+            fun drawScaled(context: DrawContext, text: String, x: Int, y: Int, color: Int) {
+                context.matrices.push()
+                val scale = Settings.INSTANCE.settings.getById<SliderSetting>("scale")!!.getSetValue().toFloat()
+                context.matrices.scale(scale, scale, scale)
+
+                context.drawText(Helix.MC.textRenderer, text, scale(x), scale(y), color, false)
+
+                context.matrices.pop()
+            }
+
+            fun draw(context: DrawContext, text: String, x: Int, y: Int, color: Int) {
+                context.drawText(Helix.MC.textRenderer, text, x, y, color, false)
+            }
+
+            private fun scale(f: Int): Int {
+                val scale = Settings.INSTANCE.settings.getById<SliderSetting>("scale")!!.getSetValue().toFloat()
+                return (f/scale).toInt()
             }
         }
     }

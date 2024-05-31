@@ -31,6 +31,7 @@ import net.integr.eventsystem.EventSystem
 import net.integr.eventsystem.Priority
 import net.integr.modules.management.ModuleManager
 import net.integr.modules.management.settings.impl.CyclerSetting
+import net.integr.modules.management.settings.impl.SliderSetting
 import net.integr.rendering.RenderingEngine
 import net.integr.rendering.screens.GameScreen
 import net.integr.rendering.screens.MenuScreen
@@ -63,7 +64,7 @@ class Helix : ClientModInitializer, ModInitializer {
 
     private var startTime = 0L
 
-    private var branding: Box = Box(4, 49, 110, 40, null, false, true)
+    private var branding: Box = Box(4, 49, 110, 40, null, textCentered = false, outlined = true)
 
     private val savingThread = Thread {
         while (true) {
@@ -141,9 +142,9 @@ class Helix : ClientModInitializer, ModInitializer {
     fun onRenderTitleScreen(event: RenderTitleScreenEvent) {
         branding.render(event.context, event.mouseX, event.mouseY, event.delta)
 
-        event.context.drawText(MC.textRenderer, Formatting.BOLD.toString() + "Helix", 8, 55, Variables.guiColor, false)
-        event.context.drawText(MC.textRenderer, "by Integr", 8, 65, Variables.guiColor, false)
-        event.context.drawText(MC.textRenderer, "v$VERSION", 8, 75, Variables.guiColor, false)
+        RenderingEngine.Text.drawScaled(event.context, Formatting.BOLD.toString() + "Helix", 8, 55, Variables.guiColor)
+        RenderingEngine.Text.drawScaled(event.context, "by Integr", 8, 65, Variables.guiColor)
+        RenderingEngine.Text.drawScaled(event.context, "v$VERSION", 8, 75, Variables.guiColor)
     }
 
     @EventListen

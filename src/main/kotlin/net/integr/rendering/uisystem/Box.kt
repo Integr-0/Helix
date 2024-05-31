@@ -17,7 +17,9 @@
 package net.integr.rendering.uisystem
 
 import net.integr.Helix
+import net.integr.Settings
 import net.integr.Variables
+import net.integr.modules.management.settings.impl.SliderSetting
 import net.integr.rendering.RenderingEngine
 import net.integr.rendering.uisystem.base.HelixUiElement
 import net.minecraft.client.gui.DrawContext
@@ -36,20 +38,20 @@ class Box(var xPos: Int, var yPos: Int, var xSize: Int, var ySize: Int, @Nullabl
 
         if (outlined) {
             if (innerIsDisabled) {
-                RenderingEngine.TwoDimensional.fillRound(x1.toFloat(), y1.toFloat(), x2.toFloat(), y2.toFloat(), Variables.guiDisabled, textColor, context, 0.05f, 9f)
-            } else RenderingEngine.TwoDimensional.fillRound(x1.toFloat(), y1.toFloat(), x2.toFloat(), y2.toFloat(), color, textColor, context, 0.05f, 9f)
+                RenderingEngine.TwoDimensional.fillRoundScaled(x1.toFloat(), y1.toFloat(), x2.toFloat(), y2.toFloat(), Variables.guiDisabled, textColor, context, 0.05f, 9f)
+            } else RenderingEngine.TwoDimensional.fillRoundScaled(x1.toFloat(), y1.toFloat(), x2.toFloat(), y2.toFloat(), color, textColor, context, 0.05f, 9f)
         } else {
-            RenderingEngine.TwoDimensional.fillRoundNoOutline(x1.toFloat(), y1.toFloat(), x2.toFloat(), y2.toFloat(), color, context, 0.05f, 9f)
+            RenderingEngine.TwoDimensional.fillRoundNoOutlineScaled(x1.toFloat(), y1.toFloat(), x2.toFloat(), y2.toFloat(), color, context, 0.05f, 9f)
         }
 
         if (text != null) {
             if (textCentered) {
-                context.drawText(Helix.MC.textRenderer, text, x1 + xSize / 2 - Helix.MC.textRenderer.getWidth(text) / 2 - 4, y1 + ySize / 2 - 4, textColor, false)
+                RenderingEngine.Text.drawScaled(context, text!!, x1+xSize/2-Helix.MC.textRenderer.getWidth(text)/2-4, y1+ySize/2-4, textColor)
             } else {
                 if (outlined) {
-                    context.drawText(Helix.MC.textRenderer, text, x1 + 7, y1 + ySize / 2 - 4, textColor, false)
+                    RenderingEngine.Text.drawScaled(context, text!!, x1 + 7, y1+ySize/2-4, textColor)
                 } else {
-                    context.drawText(Helix.MC.textRenderer, text, x1 + 2, y1 + ySize / 2 - 4, textColor, false)
+                    RenderingEngine.Text.drawScaled(context, text!!, x1 + 2, y1+ySize/2-4, textColor)
                 }
             }
         }
